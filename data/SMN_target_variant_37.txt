@@ -1,0 +1,2 @@
+#chr    pos_SMN1    base_REF   pos_SMN2    base_ALT   annotation
+5    70247901    T   69372481    G   g.27134T>G
