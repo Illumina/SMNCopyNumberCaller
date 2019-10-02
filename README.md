@@ -1,9 +1,11 @@
 # SMNCopyNumberCaller
 
-This is a tool to call the copy number of full-length SMN1, full-length SMN2, as well as SMN* (with a deletion of Exon7-8) from a WGS bam file.
+SMNCopyNumberCaller is a tool to call the copy number of full-length SMN1, full-length SMN2, as well as SMN* (SMN1/2Δ7–8, with a deletion of Exon7-8) from a WGS bam file. Please refer to our [medRxiv link](https://www.medrxiv.org/content/10.1101/19006635v1) for details about the method.   
+
+SMNCopyNumberCaller is provided under the terms and conditions of the [Apache License Version 2.0](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/LICENSE.txt). It requires several third party packages (numpy, scipy, statsmodels and pysam) provided under other open source licenses, which are listed in [COPYRIGHT.txt](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/COPYRIGHT.txt).  
 
 ## Running the program
-The program can be run as follows:
+This Python3 program can be run as follows:
 ```bash
 ./smn_caller.py --manifest MANIFEST_FILE \
                 --genome [19/37/38] \
@@ -12,12 +14,9 @@ The program can be run as follows:
                 --threads NUMBER_THREADS
 ```
 Each line in the manifest file should list the absolute path to an input bam file.    
-Compatible with Python3.   
-Required python packages: numpy, scipy, statsmodels and pysam.   
 
 ## Interpreting the output
 The program produces a .tsv file in the directory specified by --outDir.   
-A .json file is also produced that contains more information for debugging purpose.   
 The fields are explained below: 
 
 | Fields in tsv     | Explanation                                                    | 
@@ -32,6 +31,8 @@ The fields are explained below:
 | Full_length_CN_raw| Raw normalized depth of full-length SMN                        |
 | g.27134T>G_CN     | CN of g.27134T>G, SNP associated with 2+0 silent carrier       |
 | SMN1_CN_raw       | Raw SMN1 CN values at SNP sites that differ btn SMN1/SMN2      |
+
+A .json file is also produced that contains more information for debugging purpose.   
 
 | Fields in json    | Explanation                                                    | 
 |:------------------|:---------------------------------------------------------------|
