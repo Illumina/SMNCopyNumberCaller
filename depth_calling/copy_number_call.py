@@ -78,8 +78,9 @@ def process_raw_call_gc(cn_prob, post_cutoff, keep_none=True):
     cn_prob_filtered = []
     for cn_call in cn_prob:
         if len(cn_call) == 1:
-            if cn_call != [None]:
-                cn_prob_filtered.append(cn_call[0])
+            call_value = cn_call[0]
+            if call_value is not None or keep_none:
+                cn_prob_filtered.append(call_value)
         elif cn_call[1] > post_cutoff:
             cn_prob_filtered.append(cn_call[0])
         elif keep_none:
@@ -101,8 +102,9 @@ def process_raw_call_denovo(cn_prob, post_cutoff1, post_cutoff2,
     cn_prob_filtered = []
     for i, cn_call in enumerate(cn_prob):
         if len(cn_call) == 1:
-            if cn_call != [None]:
-                cn_prob_filtered.append(cn_call[0])
+            call_value = cn_call[0]
+            if call_value is not None or keep_none:
+                cn_prob_filtered.append(call_value)
         else:
             if list_total_cn is not None:
                 total_cn = list_total_cn[i]
