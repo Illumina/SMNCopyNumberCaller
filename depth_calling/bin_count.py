@@ -26,7 +26,7 @@ from functools import partial
 import pysam
 import numpy as np
 from statsmodels.nonparametric.smoothers_lowess import lowess
-from utilities import open_alignment_file
+from .utilities import open_alignment_file
 
 
 MAD_CONSTANT = 1.4826
@@ -211,7 +211,7 @@ def partition(lst, n):
 
 def get_normalization_region_values(l, bam, reference=None):
     """Perform read counting in a list of regions."""
-    bamfile = open_alignment_file(bamf, reference)
+    bamfile = open_alignment_file(bam, reference)
     lcount = []
     for region in l:
         num_reads = get_read_count(bamfile, region)
