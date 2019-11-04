@@ -33,7 +33,7 @@ import pysam
 from depth_calling.snp_count import get_supporting_reads, get_fraction, \
     get_snp_position
 from depth_calling.gmm import Gmm
-from depth_calling.utilities import parse_gmm_file, parse_region_file
+from depth_calling.utilities import parse_gmm_file, parse_region_file, open_alignment_file
 from depth_calling.bin_count import get_normed_depth, \
     get_normed_depth_from_count, get_read_length
 from caller.call_smn12 import get_smn12_call
@@ -47,7 +47,7 @@ def load_parameters():
         description='Call Copy number of full-length SMN1, full-length SMN2 and \
         SMN* (Exon7-8 deletion) from a WGS bam file.')
     parser.add_argument(
-        '--manifest', help='Manifest listing absolute paths to bam files',
+        '--manifest', help='Manifest listing absolute paths to input BAM/CRAM files',
         required=True)
     parser.add_argument(
         '--genome', help='Reference genome, select from 19, 37, or 38',
@@ -57,10 +57,12 @@ def load_parameters():
     parser.add_argument(
         '--prefix', help='Prefix to output file', required=True)
     parser.add_argument(
-        '--threads', help='Number of threads to use', type=int, default=1,
+        '--threads', help='Number of threads to use. Default is 1', type=int, default=1,
         required=False)
     parser.add_argument(
-        '--countFilePath', help='Path to count files', required=False)
+        '--reference', help='Optional path to reference fasta file for CRAM', required=False)
+    parser.add_argument(
+        '--countFilePath', help='Optional path to count files', required=False)
 
     args = parser.parse_args()
     if args.genome not in ['19', '37', '38']:
@@ -71,11 +73,11 @@ def load_parameters():
 
 def smn_cn_caller(
         bam, region_dic, gmm_parameter,
-        snp_db, variant_db, threads, count_file=None):
+        snp_db, variant_db, threads, count_file=None, reference_fasta=None):
     """Return SMN CN calls for each sample."""
     # 1. read counting, normalization
     if count_file is not None:
-        bamfile = pysam.AlignmentFile(bam, "rb")
+        bamfile = open_alignment_file(bam, reference_fasta)
         reads = bamfile.fetch()
         read_length = get_read_length(reads)
         bamfile.close()
@@ -83,7 +85,7 @@ def smn_cn_caller(
             count_file, region_dic, read_length, gc_correct=False)
     else:
         normalized_depth = get_normed_depth(
-            bam, region_dic, threads, gc_correct=False)
+            bam, region_dic, threads, reference=reference_fasta, gc_correct=False)
 
     # 2. GMM and CN call
     cn_call = namedtuple(
@@ -102,12 +104,12 @@ def smn_cn_caller(
 
     # 3. Get SNP ratios
     smn1_read_count, smn2_read_count = get_supporting_reads(
-        bam, snp_db.dsnp1, snp_db.dsnp2, snp_db.nchr, snp_db.dindex
+        bam, snp_db.dsnp1, snp_db.dsnp2, snp_db.nchr, snp_db.dindex, reference=reference_fasta
     )
     smn1_fraction = get_fraction(smn1_read_count, smn2_read_count)
     var_ref_count, var_alt_count = get_supporting_reads(
         bam, variant_db.dsnp1, variant_db.dsnp2, variant_db.nchr,
-        variant_db.dindex
+        variant_db.dindex, reference=reference_fasta
     )
 
     # 4. Call CN of SMN1 and SMN2
@@ -166,6 +168,7 @@ def main():
     genome = parameters.genome
     prefix = parameters.prefix
     threads = parameters.threads
+    reference_fasta = parameters.reference
     path_count_file = parameters.countFilePath
     logging.basicConfig(level=logging.DEBUG)
 
@@ -200,7 +203,7 @@ def main():
                     path_count_file, sample_id + '_count.txt')
             if count_file is None and os.path.exists(bam_name) == 0:
                 logging.warning(
-                    'Input bam file for sample %s does not exist.', sample_id)
+                    'Input alignmet file for sample %s does not exist.', sample_id)
             elif count_file is not None and os.path.exists(count_file) == 0:
                 logging.warning(
                     'Input count file for sample %s does not exist', sample_id)
@@ -211,7 +214,7 @@ def main():
                 )
                 smn_call = smn_cn_caller(
                     bam_name, region_dic, gmm_parameter,
-                    snp_db, variant_db, threads, count_file
+                    snp_db, variant_db, threads, count_file, reference_fasta
                 )
                 # Use normalized coverage MAD across stable regions
                 # as a sample QC measure.
