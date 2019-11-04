@@ -57,12 +57,12 @@ def load_parameters():
     parser.add_argument(
         '--prefix', help='Prefix to output file', required=True)
     parser.add_argument(
-        '--threads', help='Number of threads to use', type=int, default=1,
+        '--threads', help='Number of threads to use. Default is 1', type=int, default=1,
         required=False)
     parser.add_argument(
         '--reference', help='Optional path to reference fasta file for CRAM', required=False)
     parser.add_argument(
-        '--countFilePath', help='Path to count files', required=False)
+        '--countFilePath', help='Optional path to count files', required=False)
 
     args = parser.parse_args()
     if args.genome not in ['19', '37', '38']:
