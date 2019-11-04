@@ -22,6 +22,8 @@
 
 from collections import namedtuple
 import pysam
+from utilities import open_alignment_file
+
 
 COMPLEMENT = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', 'N': 'N'}
 SITES_STRINGENT = []  # consider being more stringent for exon8 site for SMN
@@ -144,12 +146,12 @@ def get_fraction(lsnp1, lsnp2):
     return reg1_fraction
 
 
-def get_supporting_reads(bamf, dsnp1, dsnp2, nchr, dindex):
+def get_supporting_reads(bamf, dsnp1, dsnp2, nchr, dindex, reference=None):
     """
     Return the number of supporting reads at each position in
     both region1 and region2.
     """
-    bamfile_handle = pysam.AlignmentFile(bamf, 'rb')
+    bamfile_handle = open_alignment_file(bamf, reference_fasta)
     assert len(dsnp1) == len(dsnp2)
     # Go through SNP sites in both regions,
     # and count the number of reads supporting each gene.
@@ -163,11 +165,11 @@ def get_supporting_reads(bamf, dsnp1, dsnp2, nchr, dindex):
     return lsnp1, lsnp2
 
 
-def get_supporting_reads_single_region(bamf, dsnp1, nchr, dindex):
+def get_supporting_reads_single_region(bamf, dsnp1, nchr, dindex, reference=None):
     """
     Return the number of supporting reads at each position only in region1.
     """
-    bamfile_handle = pysam.AlignmentFile(bamf, 'rb')
+    bamfile_handle = open_alignment_file(bamf, reference_fasta)
     lsnp1, lsnp2 = get_reads_by_region(bamfile_handle, nchr, dsnp1, dindex, 10)
     bamfile_handle.close()
     return lsnp1, lsnp2

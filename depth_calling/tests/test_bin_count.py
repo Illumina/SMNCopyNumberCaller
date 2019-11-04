@@ -28,7 +28,7 @@ import pysam
 
 from ..bin_count import get_read_count, get_read_length, mad, normalize, \
     get_normed_depth
-from ..utilities import parse_region_file
+from ..utilities import parse_region_file, open_alignment_file
 
 test_data_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
@@ -36,7 +36,7 @@ test_data_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 class TestBinCount(object):
     def test_read_count_from_bam(self):
         bam = os.path.join(test_data_dir, 'NA12878.bam')
-        bamfile = pysam.AlignmentFile(bam, "rb")
+        bamfile = open_alignment_file(bam)
 
         region1 = ('5', 69372349, 69372400)
         region1_count = get_read_count(bamfile, region1)
@@ -50,7 +50,7 @@ class TestBinCount(object):
 
     def test_get_readlength(self):
         bam = os.path.join(test_data_dir, 'NA12878.bam')
-        bamfile = pysam.AlignmentFile(bam, "rb")
+        bamfile = open_alignment_file(bam)
         reads = bamfile.fetch('5', 69372349, 70248303)
         read_length = get_read_length(reads)
         assert read_length == 150

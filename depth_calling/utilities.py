@@ -21,6 +21,7 @@
 #
 
 from collections import namedtuple
+import pysam
 
 
 def parse_region_file(region_file):
@@ -47,3 +48,9 @@ def parse_gmm_file(gmm_file):
             list_value = [a.split(':')[-1] for a in split_line[2:]]
             dpar_tmp[split_line[0]].setdefault(split_line[1], list_value)
     return dpar_tmp
+
+
+def open_alignment_file(alignment_file, reference_fasta=None):
+    if alignment_file.endswith('cram'):
+        return pysam.AlignmentFile(alignment_file, 'rc', reference_filename=reference_fasta)
+    return pysam.AlignmentFile(alignment_file, 'rb')

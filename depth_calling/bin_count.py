@@ -26,6 +26,8 @@ from functools import partial
 import pysam
 import numpy as np
 from statsmodels.nonparametric.smoothers_lowess import lowess
+from utilities import open_alignment_file
+
 
 MAD_CONSTANT = 1.4826
 
@@ -156,10 +158,7 @@ def count_reads_and_prepare_for_normalization(bamf, region_dic, nCores=1,
     Return the normalized depth values and coverage stats for a sample
     given a bam file
     """
-    if reference is None:
-        bamfile = pysam.AlignmentFile(bamf, "rb")
-    else:
-        bamfile = pysam.AlignmentFile(bamf, "rc", reference_filename=reference)
+    bamfile = open_alignment_file(bamf, reference)
     # Store read counts in each interval
     counts_for_normalization = []
     gc_for_normalization = []
@@ -212,10 +211,7 @@ def partition(lst, n):
 
 def get_normalization_region_values(l, bam, reference=None):
     """Perform read counting in a list of regions."""
-    if reference is None:
-        bamfile = pysam.AlignmentFile(bam, "rb")
-    else:
-        bamfile = pysam.AlignmentFile(bam, "rc", reference_filename=reference)
+    bamfile = open_alignment_file(bamf, reference)
     lcount = []
     for region in l:
         num_reads = get_read_count(bamfile, region)
