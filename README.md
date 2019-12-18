@@ -1,6 +1,6 @@
 # SMNCopyNumberCaller
 
-SMNCopyNumberCaller is a tool to call the copy number of full-length SMN1, full-length SMN2, as well as SMN* (SMN1/2Δ7–8, with a deletion of Exon7-8) from a WGS bam file. Please refer to our [medRxiv link](https://www.medrxiv.org/content/10.1101/19006635v1) for details about the method.   
+SMNCopyNumberCaller is a tool to call the copy number of full-length SMN1, full-length SMN2, as well as SMN2Δ7–8 (SMN2 with a deletion of Exon7-8) from a whole-genome sequencing (WGS) BAM file. This caller works with standard WGS sequencing depth (>=30X), and is insensitive to various aligners (BWA and Isaac have been tested and no difference was observed). Please refer to our [medRxiv link](https://www.medrxiv.org/content/10.1101/19006635v2) for details about the method.   
 
 SMNCopyNumberCaller is provided under the terms and conditions of the [Apache License Version 2.0](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/LICENSE.txt). It requires several third party packages (numpy, scipy, statsmodels and pysam) provided under other open source licenses, which are listed in [COPYRIGHT.txt](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/COPYRIGHT.txt).  
 
@@ -26,7 +26,7 @@ The fields are explained below:
 | isCarrier         | Whether sample is called as SMA carrier (one copy of SMN1)     |
 | SMN1_CN           | Copy number of SMN1 (None means no-call)                       |
 | SMN2_CN           | Copy number of SMN2                                            |
-| SMN\*_CN          | Copy number of SMN\* (with deletion of Exon7-8)                |
+| SMN2delta7-8_CN   | Copy number of SMN2Δ7–8 (deletion of Exon7-8)                  |
 | Total_CN_raw      | Raw normalized depth of total SMN                              |
 | Full_length_CN_raw| Raw normalized depth of full-length SMN                        |
 | g.27134T>G_CN     | CN of g.27134T>G, SNP associated with 2+0 silent carrier       |

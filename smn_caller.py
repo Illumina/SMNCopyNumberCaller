@@ -142,7 +142,7 @@ def smn_cn_caller(
 def write_to_tsv(final_output, out_tsv):
     """Write to tsv output."""
     header = [
-        'Sample', 'isSMA', 'isCarrier', 'SMN1_CN', 'SMN2_CN', 'SMN*_CN',
+        'Sample', 'isSMA', 'isCarrier', 'SMN1_CN', 'SMN2_CN', 'SMN2delta7-8_CN',
         'Total_CN_raw', 'Full_length_CN_raw', 'g.27134T>G_CN',
         'SMN1_CN_raw'
     ]
@@ -152,7 +152,7 @@ def write_to_tsv(final_output, out_tsv):
             final_call = final_output[sample_id]
             output_per_sample = [
                 sample_id, final_call['isSMA'], final_call['isCarrier'],
-                final_call['SMN1'], final_call['SMN2'], final_call['SMNstar'],
+                final_call['SMN1'], final_call['SMN2'], final_call['SMN2delta78'],
                 final_call['Total_CN_raw'], final_call['Full_length_CN_raw'],
                 final_call['g27134TG_CN'],
                 ','.join([str(a) for a in final_call['SMN1_CN_raw']])

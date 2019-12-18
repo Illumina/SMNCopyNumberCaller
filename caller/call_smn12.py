@@ -189,7 +189,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
     smn1_fraction = get_fraction(lsnp1, lsnp2)
     smn_call = namedtuple(
         'smn_call',
-        'SMN1 SMN2 SMNstar isCarrier isSMA \
+        'SMN1 SMN2 SMN2delta78 isCarrier isSMA \
         SMN1_CN_raw Info Confidence g27134TG_raw g27134TG_CN')
     raw_cn_call = update_full_length_cn(raw_cn_call)
     full_length_cn = raw_cn_call.exon78_cn
