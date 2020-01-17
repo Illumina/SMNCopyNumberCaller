@@ -37,6 +37,7 @@ A .json file is also produced that contains more information for debugging purpo
 | Fields in json    | Explanation                                                    | 
 |:------------------|:---------------------------------------------------------------|
 | Coverage_MAD      | Median absolute deviation of depth, measure of sample quality  |
+| Median_depth      | Sample median depth                                            |
 | SMN1_read_support | Number of reads carrying SMN1 allele                           |
 | SMN2_read_support | Number of reads carrying SMN2 allele                           |
 | SMN1_fraction     | Fraction of reads carrying SMN1 allele                         |

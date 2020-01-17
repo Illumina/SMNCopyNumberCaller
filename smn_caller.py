@@ -122,13 +122,13 @@ def smn_cn_caller(
     # 5. Prepare final call set
     sample_call = namedtuple(
         'sample_call',
-        'Coverage_MAD \
+        'Coverage_MAD Median_depth \
         Full_length_CN_raw Total_CN_raw \
         SMN1_read_support SMN2_read_support SMN1_fraction \
         g27134TG_REF_count g27134TG_ALT_count'
     )
     sample_cn_call = sample_call(
-        round(normalized_depth.mad, 3),
+        round(normalized_depth.mad, 3), round(normalized_depth.mediandepth, 2),
         raw_cn_call.exon78_depth, raw_cn_call.exon16_depth,
         smn1_read_count, smn2_read_count, [round(a, 2) for a in smn1_fraction],
         var_ref_count, var_alt_count
