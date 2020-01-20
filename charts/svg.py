@@ -1,3 +1,6 @@
+from charts.scale import x_scale, y_scale
+
+
 class SvgElement:
     def __init__(self, name, attrs, value=None):
         self.name = name
@@ -76,17 +79,176 @@ def text(x, y, txt, style="font: 13px sans-serif", transform=""):
     ], txt)
 
 
+def path(points, color="black", thickness=1, dashes=0, opacity=1.0):
+    return SvgElement("polyline", [
+        ("points", " ".join(points)),
+        ("stroke", color),
+        ("fill", "none"),
+        ("stroke-width", thickness),
+        ("opacity", opacity),
+        ("stroke-dasharray", dashes)
+    ])
+
+
 def add_tooltip(element, txt):
-    title = SvgElement("title", [], txt)
+    title_el = SvgElement("title", [], txt)
     if element.value is None:
-        element.value = [title]
+        element.value = [title_el]
     else:
-        element.value += title
+        element.value += title_el
+
+    return element
 
 
-def headers():
-    return SvgElement("svg", [
+def headers(height=None):
+    svg = SvgElement("svg", [
         ("xmlns", "http://www.w3.org/2000/svg"),
         ("xmlns:xlink", "http://www.w3.org/1999/xlink")
     ])
+    if height is not None:
+        svg.add_attr(("style", "height: %s" % height))
+    return svg
 
+
+def x_axis_lines(x_axis, y_axis):
+    lines = []
+    for tic in x_axis["tics"]:
+        x = x_scale(tic, x_axis)
+        lines.append(
+            line(
+                x,
+                y_scale(y_axis["min"], y_axis),
+                x,
+                y_scale(y_axis["max"], y_axis),
+                opacity=0.5,
+                dashes=3
+            )
+        )
+
+    return lines
+
+
+def x_axis_tics(x_axis, y_axis):
+    tics = [
+        line(
+            x_scale(x_axis["tics"][0], x_axis),
+            y_scale(y_axis["min"], y_axis),
+            x_scale(x_axis["tics"][0], x_axis),
+            y_scale(y_axis["max"], y_axis)
+        )
+    ]
+
+    for tic in x_axis["tics"]:
+        tics.append(
+            line(
+                x_scale(tic, x_axis),
+                y_scale(y_axis["min"], y_axis),
+                x_scale(tic, x_axis),
+                y_scale(y_axis["min"], y_axis) + 6
+            )
+        )
+
+    return tics
+
+
+def x_axis_text(x_axis, y_axis):
+    txt = []
+    for tic in x_axis["tics"]:
+        txt.append(
+            text(
+                x_scale(tic, x_axis) - 4,
+                y_scale(y_axis["min"], y_axis) + 18,
+                "%s" % tic
+            )
+        )
+
+    return txt
+
+
+def x_axis_title(x_axis, y_axis):
+    x = ((x_axis["max"] - x_axis["min"]) / 2) + x_axis["min"]
+    return [
+        text(
+            x_scale(x, x_axis) - (len(x_axis["title"]) * 6),
+            y_scale(y_axis["min"], y_axis) + 34,
+            x_axis["title"],
+            style="font: 18px sans-serif"
+        )
+    ]
+
+
+def y_axis_lines(x_axis, y_axis):
+    lines = []
+    for tic in y_axis["tics"]:
+        y = y_scale(tic, y_axis)
+        lines.append(
+            line(
+                x_scale(x_axis["min"], x_axis),
+                y,
+                x_scale(x_axis["max"], x_axis),
+                y,
+                opacity=0.5,
+                dashes=3
+            )
+        )
+
+    return lines
+
+
+def y_axis_tics(x_axis, y_axis):
+    tics = [
+        line(
+            x_scale(x_axis["min"], x_axis),
+            y_scale(y_axis["min"], y_axis),
+            x_scale(x_axis["max"], x_axis),
+            y_scale(y_axis["min"], y_axis)
+        )
+    ]
+    for tic in y_axis["tics"]:
+        tics.append(
+            line(
+                x_scale(x_axis["min"], x_axis) - 6,
+                y_scale(tic, y_axis),
+                x_scale(x_axis["min"], x_axis),
+                y_scale(tic, y_axis)
+            )
+        )
+
+    return tics
+
+
+def y_axis_text(x_axis, y_axis):
+    txt = []
+    for tic in y_axis["tics"]:
+        txt.append(
+            text(
+                x_scale(x_axis["min"], x_axis) - 30,
+                y_scale(tic, y_axis) + 3,
+                "%s" % tic
+            )
+        )
+
+    return txt
+
+
+def y_axis_title(y_axis):
+    return [
+        text(
+            -(y_scale(y_axis["min"], y_axis)),
+            30,
+            y_axis["title"],
+            style="font: 18px sans-serif",
+            transform="rotate(270)"
+        )
+    ]
+
+
+def title(txt, x_axis):
+    return [
+        text(
+            x_scale(x_axis["min"], x_axis),
+            30,
+            txt,
+            style="font: 22px sans-serif",
+        )
+    ]
