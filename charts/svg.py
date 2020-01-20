@@ -84,12 +84,10 @@ def add_tooltip(element, txt):
         element.value += title
 
 
-def headers(width, height, padding):
+def headers():
     return "<svg " \
            "xmlns=\"http://www.w3.org/2000/svg\" " \
-           "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " \
-           "width=\"%s\" " \
-           "height=\"%s\">" % (width, height)
+           "xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
 
 def closing_tag():
