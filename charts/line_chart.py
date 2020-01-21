@@ -9,30 +9,18 @@ class LineConfigException(Exception):
     pass
 
 
-def get_line_chart(config, col, idx):
-    width = config["line_charts"]["width"]
-    height = config["line_charts"]["height"]
-    padding = config["line_charts"]["padding"]
-
-    sample_data = read_sample_line_data(config["sample_file"], col=col)
+def get_line_chart(sample_data, config, col, idx):
+    width = config["width"]
+    height = config["height"]
+    padding = config["padding"]
 
     x_axis = get_line_x_axis(sample_data, width, padding)
     y_axis = get_line_y_axis(sample_data, height, padding)
 
     chart = svg_line.get_svg(sample_data, x_axis, y_axis, col=col)
     chart.add_attr(["x", "0"])
-    chart.add_attr(["y", "%s" % (idx * (config["height"] + config["padding"]))])
+    chart.add_attr(["y", "%s" % (idx * (height + padding))])
     return chart
-
-
-def read_sample_line_data(file_in, col="SMN1_CN_raw"):
-    sample_data = {}
-    with open(file_in, 'r') as fi:
-        samples = json.load(fi)
-        for key in samples:
-            sample_data[key] = samples[key][col]
-
-    return sample_data
 
 
 def get_line_x_axis(sample_data, width, padding):

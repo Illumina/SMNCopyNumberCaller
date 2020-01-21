@@ -1,5 +1,6 @@
 import charts.svg as svg
 from charts.scale import x_scale, y_scale
+from charts.colors import color_arr
 
 
 def get_svg(sample_data, x_axis, y_axis, col="SMN1_CN_raw"):
@@ -24,12 +25,11 @@ def get_svg(sample_data, x_axis, y_axis, col="SMN1_CN_raw"):
 
 def sample_paths(sample_data, x_axis, y_axis):
     paths = []
-    colors = ["blue", "green", "orange", "black", "red", "pink"]
     for idx, sample in enumerate(sample_data):
         points = []
         for x_idx, value in enumerate(sample_data[sample]):
             points.append("%s,%s" % (x_scale(x_idx + 1, x_axis), y_scale(value, y_axis)))
-        color = colors[idx % len(colors)]
+        color = color_arr[idx % len(color_arr)]
         paths.append(svg.path(points, color=color))
 
     return paths
@@ -37,9 +37,8 @@ def sample_paths(sample_data, x_axis, y_axis):
 
 def circles(sample_data, x_axis, y_axis):
     spots = []
-    colors = ["blue", "green", "orange", "black", "red", "pink"]
     for idx, sample in enumerate(sample_data):
-        colour = colors[idx % 6]
+        colour = color_arr[idx % len(color_arr)]
         for x_idx, value in enumerate(sample_data[sample]):
             circle = svg.circle(
                     x_scale(x_idx + 1, x_axis),

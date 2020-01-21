@@ -46,7 +46,7 @@ def line(x1, y1, x2, y2, color="black", thickness=1, opacity=1.0, dashes=0):
     ])
 
 
-def rect(x, y, width, height, border_color="black", fill_color="black", border_width=1, corner_radius=0):
+def rect(x, y, width, height, border_color="black", fill_color="black", border_width=1, corner_radius=0, opacity=1.0):
     return SvgElement("rect", [
         ("x", x),
         ("y", y),
@@ -54,8 +54,9 @@ def rect(x, y, width, height, border_color="black", fill_color="black", border_w
         ("height", height),
         ("stroke", border_color),
         ("stroke-width", border_width),
-        ("fill-color", fill_color),
-        ("rx", corner_radius)
+        ("fill", fill_color),
+        ("rx", corner_radius),
+        ("opacity", opacity)
     ])
 
 
@@ -66,7 +67,7 @@ def circle(x, y, r, fill_color="black", border_color="black", border_width="blac
         ("r", r),
         ("stroke", border_color),
         ("stroke-width", border_width),
-        ("fill-color", fill_color)
+        ("fill", fill_color)
     ])
 
 

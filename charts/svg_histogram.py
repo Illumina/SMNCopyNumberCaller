@@ -1,5 +1,6 @@
 import charts.svg as svg
 from charts.scale import x_scale, y_scale
+from charts.colors import colors
 
 
 def get_svg(pop_data, sample_data, x_axis, y_axis, col="Total_CN_raw"):
@@ -33,7 +34,7 @@ def histogram_lines(pop_data, x_axis, y_axis):
                 y,
                 x,
                 y_scale(0, y_axis),
-                color="#646464",
+                color=colors["grey"],
                 opacity=0.5
             )
         )
@@ -42,6 +43,8 @@ def histogram_lines(pop_data, x_axis, y_axis):
 
 def sample_lines(sample_data, x_axis, y_axis):
     lines = []
+    cols = ["dark-blue", "purple", "medium-blue"]
+
     for idx, key in enumerate(sample_data.keys()):
         x = x_scale(sample_data[key], x_axis)
         lines.append(
@@ -50,7 +53,7 @@ def sample_lines(sample_data, x_axis, y_axis):
                 y_scale(0, y_axis),
                 x,
                 y_scale(y_axis["max"], y_axis),
-                color="blue"
+                color=colors[cols[idx % 3]]
             )
         )
 
