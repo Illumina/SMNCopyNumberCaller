@@ -10,7 +10,7 @@ config = {
     "sample_file": "/Users/awarren/Documents/Illumina/XiaoSMN/SMN.json",
     "histograms": {
         "columns": ["Total_CN_raw", "Full_length_CN_raw"],
-        "width": 600,
+        "width": 800,
         "height": 300,
         "padding": 40
     },
