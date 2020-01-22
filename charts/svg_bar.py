@@ -1,6 +1,6 @@
 import charts.svg as svg
 from charts.scale import x_scale, y_scale
-from charts.colors import colors
+from charts.colors import colors, color_arr
 
 
 def get_svg(sample_data, x_axis, y_axis, norm_y_axis, cols):
@@ -18,6 +18,7 @@ def get_svg(sample_data, x_axis, y_axis, norm_y_axis, cols):
     svg_bars += sample_bars(sample_data, x_axis, y_axis, cols)
     svg_bars += sample_lines(sample_data, x_axis, norm_y_axis, cols)
     svg_bars += svg.title(sample_data["sample"], x_axis)
+    svg_bars += svg.get_keys(cols, x_axis, y_axis, element_type="rect")
 
     chart.value = svg_bars
     return chart
@@ -29,8 +30,8 @@ def sample_bars(sample_data, x_axis, y_axis, cols):
 
     bars = []
     for i in range(0, len(smn1)):
-        smn1_bar = get_bar(i + 0.6, smn1[i], x_axis, y_axis, colors["purple"])
-        smn2_bar = get_bar(i + 1, smn2[i], x_axis, y_axis, colors["medium-blue"])
+        smn1_bar = get_bar(i + 0.6, smn1[i], x_axis, y_axis, color_arr[0])
+        smn2_bar = get_bar(i + 1, smn2[i], x_axis, y_axis, color_arr[1])
         bars += [smn1_bar, smn2_bar]
 
     return bars
@@ -47,8 +48,8 @@ def sample_lines(sample_data, x_axis, y_axis, cols):
         smn1_points.append("%s,%s" % (x_scale(i + 0.8, x_axis), y_scale(smn1[i], y_axis)))
         smn2_points.append("%s,%s" % (x_scale(i + 1.2, x_axis), y_scale(smn2[i], y_axis)))
 
-    smn1_line = svg.path(smn1_points, color=colors["purple"])
-    smn2_line = svg.path(smn2_points, color=colors["medium-blue"])
+    smn1_line = svg.path(smn1_points, color=color_arr[0])
+    smn2_line = svg.path(smn2_points, color=color_arr[1])
 
     return [smn1_line, smn2_line]
 

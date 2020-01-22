@@ -1,24 +1,25 @@
 colors = {
-    "orange": "#C47A4F",
-    "pink": "#A95AA1",
-    "light-blue": "#7C9BA5",
     "dark-blue": "#0F2080",
+    "pink": "#A95AA1",
     "medium-blue": "#607381",
-    "tan": "#AE9C45",
+    "orange": "#C47A4F",
     "green": "#194D31",
-    "grey": "#646464",
     "purple": "#601A4A",
-    "black": "#000000"
+    "light-blue": "#7C9BA5",
+    "tan": "#AE9C45",
+    "grey": "#646464",
+    "black": "#000000",
 }
 
 color_arr = [
-    "#C47A4F",
-    "#A95AA1",
-    "#7C9BA5",
     "#0F2080",
+    "#A95AA1",
     "#607381",
-    "#AE9C45",
+    "#C47A4F",
     "#194D31",
+    "#601A4A",
+    "#7C9BA5",
+    "#AE9C45",
     "#646464",
-    "#601A4A"
+    "#000000",
 ]

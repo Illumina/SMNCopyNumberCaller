@@ -18,6 +18,7 @@ def get_svg(sample_data, x_axis, y_axis, col="SMN1_CN_raw"):
     svg_lines += sample_paths(sample_data, x_axis, y_axis)
     svg_lines += circles(sample_data, x_axis, y_axis)
     svg_lines += svg.title("%s" % col, x_axis)
+    svg_lines += svg.get_keys([key for key in sample_data], x_axis, y_axis, element_type="circle")
 
     line_chart.value = svg_lines
     return line_chart

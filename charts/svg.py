@@ -1,3 +1,4 @@
+from charts.colors import color_arr
 from charts.scale import x_scale, y_scale
 
 
@@ -253,3 +254,24 @@ def title(txt, x_axis):
             style="font: 22px sans-serif",
         )
     ]
+
+
+def get_keys(key_items, x_axis, y_axis, element_type="line"):
+    keys = []
+    x = x_scale(x_axis["max"], x_axis) + 5
+    y = y_scale(y_axis["max"], y_axis)
+    for idx, key in enumerate(key_items):
+        color = color_arr[idx % len(color_arr)]
+        y_val = y + (15 * (idx + 1))
+        keys.append(get_key_symbol(x, y_val, element_type, color))
+        keys.append(text(x + 20, y_val, key))
+
+    return keys
+
+
+def get_key_symbol(x, y, element_type, color):
+    return {
+        "line": line(x, y - 6, x + 15, y - 6, color=color, thickness=3),
+        "circle": circle(x + 10, y - 4, 4, fill_color=color, border_color=color),
+        "rect": rect(x + 6, y - 8, 8, 8, fill_color=color),
+    }[element_type]

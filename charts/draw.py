@@ -3,11 +3,10 @@ import charts.svg as svg
 import charts.line_chart as line_chart
 import charts.bar_chart as bar_chart
 import charts.data_utils as util
-from charts.svg_line_chart import sample_paths, circles
 
 
 config = {
-    "width": 800,
+    "width": 700,
     "height": 200,
     "padding": 40,
     "pop_file": "/Users/awarren/Documents/Illumina/XiaoSMN/SMN_1kGP_results.tsv",
@@ -21,7 +20,7 @@ config = {
     "bar_charts": {
         "columns": ["SMN1_read_support", "SMN2_read_support"]
     },
-    "output_file": "/Users/awarren/Desktop/output.svg"
+    "output_dir": "/Users/awarren/Desktop/"
 }
 
 
@@ -38,6 +37,18 @@ def add_chart_to_page(page, chart):
     else:
         page.value.append(chart)
     return page
+
+
+def svg_file(conf):
+    return "%s/smn_charts.svg" % conf["output_dir"]
+
+
+def png_file(conf):
+    return "%s/smn_charts.png" % conf["output_dir"]
+
+
+def pdf_file(conf):
+    return "%s/smn_charts.pdf" % conf["output_dir"]
 
 
 def write_svg(conf):
@@ -69,10 +80,26 @@ def write_svg(conf):
         idx += 1
         page = add_chart_to_page(page, bars)
 
-    with open(config["output_file"], 'w') as fo:
+    with open(svg_file(conf), 'w') as fo:
         fo.write(page.to_string())
 
 
-write_svg(config)
+def write_png(conf):
+    cairosvg.svg2png(url=svg_file(conf), write_to=png_file(conf))
+
+
+def write_pdf(conf):
+    cairosvg.svg2pdf(url=svg_file(conf), write_to=png_file(conf))
+
+
+def main(conf):
+    write_svg(conf)
+    write_pdf(conf)
+    write_png(conf)
+
+
+if __name__ == "__main__":
+    main(config)
+
 
 
