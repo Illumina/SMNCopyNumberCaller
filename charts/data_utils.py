@@ -38,8 +38,18 @@ def read_pop_data(data_file):
 
 
 def read_sample_data(data_file):
+    allowed_sites = [6, 7, 9, 10, 11, 12, 13, 14]
+    relevant_fields = ["SMN1_read_support", "SMN2_read_support", "SMN1_fraction", "SMN1_CN_raw", "Confidence"]
+
     with open(data_file, 'r') as fi:
-        return json.load(fi)
+        data = json.load(fi)
+
+        for sample in data:
+            for field in relevant_fields:
+                arr = data[sample][field]
+                data[sample][field] = [(i + 1, x) for i, x in enumerate(arr) if i in allowed_sites]
+
+        return data
 
 
 def get_pop_column(pop_data, column):

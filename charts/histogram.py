@@ -31,7 +31,7 @@ def add_to_map(data_map, key):
 
 
 def get_x_axis(pop_data, width, padding):
-    minimum = math.floor(min(pop_data.keys()))
+    minimum = 0
     maximum = math.ceil(max(pop_data.keys())) + 1
 
     return {

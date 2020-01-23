@@ -2,33 +2,34 @@ import math
 
 import charts.svgs.svg_line_chart as svg_line
 import charts.pdfs.pdf_line_chart as pdf_line
-from functools import reduce
 
 
 class LineConfigException(Exception):
     pass
 
 
-def get_line_chart(sample_data, config, col, fmt):
+def get_line_chart(sample, config, col, fmt):
     width = config["width"]
     height = config["height"]
     padding = config["padding"]
 
-    x_axis = get_line_x_axis(sample_data, width, padding)
-    y_axis = get_line_y_axis(sample_data, height, padding)
+    x_axis = get_line_x_axis(sample, width, padding)
+    y_axis = get_line_y_axis(sample, height, padding)
 
     if fmt == "svg":
-        return svg_line.get_svg(sample_data, config, x_axis, y_axis, col=col)
+        return svg_line.get_svg(sample, config, x_axis, y_axis, col=col)
     elif fmt == "pdf":
-        return pdf_line.get_pdf(sample_data, x_axis, y_axis, col=col)
+        return pdf_line.get_pdf(sample, x_axis, y_axis, col=col)
 
 
 def get_line_x_axis(sample_data, width, padding):
     sam = next(iter(sample_data))
+    minimum = min([x[0] for x in sample_data[sam]]) - 1
+    maximum = max([x[0] for x in sample_data[sam]]) + 1
     return {
-        "min": 1,
-        "max": len(sample_data[sam]),
-        "tics": range(1, len(sample_data[sam]) + 1),
+        "min": minimum,
+        "max": maximum,
+        "tics": range(minimum, maximum),
         "title": "Site Number",
         "domain": [padding, width - padding]
     }
@@ -38,8 +39,8 @@ def get_line_y_axis(sample_data, height, padding):
     max_val = None
     min_val = None
     for sample_id in sample_data:
-        sample_max = reduce(lambda a, b: max(a, b), sample_data[sample_id])
-        sample_min = reduce(lambda a, b: min(a, b), sample_data[sample_id])
+        sample_min = min([x[1] for x in sample_data[sample_id]]) - 1
+        sample_max = max([x[1] for x in sample_data[sample_id]]) + 1
 
         if max_val is None or max_val < sample_max:
             max_val = sample_max

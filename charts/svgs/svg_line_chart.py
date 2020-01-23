@@ -31,7 +31,7 @@ def sample_paths(sample_data, x_axis, y_axis):
     for idx, sample in enumerate(sample_data):
         points = []
         for x_idx, value in enumerate(sample_data[sample]):
-            points.append("%s,%s" % (scale(x_idx + 1, x_axis), y_scale(value, y_axis)))
+            points.append("%s,%s" % (scale(value[0], x_axis), y_scale(value[1], y_axis)))
         color = color_arr[idx % len(color_arr)]
         paths.append(svg.path(points, color=color))
 
@@ -40,16 +40,17 @@ def sample_paths(sample_data, x_axis, y_axis):
 
 def circles(sample_data, x_axis, y_axis):
     spots = []
+
     for idx, sample in enumerate(sample_data):
         colour = color_arr[idx % len(color_arr)]
-        for x_idx, value in enumerate(sample_data[sample]):
+        for x_val, y_val in sample_data[sample]:
             circle = svg.circle(
-                    scale(x_idx + 1, x_axis),
-                    y_scale(value, y_axis),
-                    3,
+                    scale(x_val, x_axis),
+                    y_scale(y_val, y_axis),
+                    4,
                     fill_color=colour,
                     border_color=colour
                 )
-            circle = svg.add_tooltip(circle, "Sample: %s\nSite: %s\nValue: %s" % (sample, x_idx + 1, value))
+            circle = svg.add_tooltip(circle, "Sample: %s\nSite: %s\nValue: %s" % (sample, x_val + 1, y_val))
             spots.append(circle)
     return spots

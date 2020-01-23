@@ -24,18 +24,23 @@ def get_bar_x_axis(sample_data, cols, width, padding):
     for col in cols:
         assert len(sample_data[col]) == length
 
+    data = [x[0] for x in sample_data[cols[0]]]
+    x_min = min(data) - 1
+    x_max = max(data) + 1
+
     return {
-        "min": 0,
-        "max": length + 1,
-        "tics": range(0, length + 1),
+        "min": x_min,
+        "max": x_max,
+        "tics": range(x_min, x_max),
         "title": "Site Number",
         "domain": [padding, width - padding]
     }
 
 
 def get_bar_y_axis(sample_data, cols, height, padding):
-    max_val = math.ceil(max(sample_data[cols[0]] + sample_data[cols[1]]))
-    min_val = math.floor(min(sample_data[cols[0]] + sample_data[cols[1]]))
+    data = sample_data[cols[0]] + sample_data[cols[1]]
+    max_val = math.ceil(max([x[1] for x in data]))
+    min_val = math.floor(min([x[1] for x in data]))
     return {
         "min": min_val,
         "max": max_val,
@@ -48,7 +53,7 @@ def get_bar_y_axis(sample_data, cols, height, padding):
 def get_normalised_y_axis(sample_data, cols, height, padding):
     hap = sample_data["Median_depth"] / 2
     all_data = sample_data[cols[0]] + sample_data[cols[1]]
-    mapped_data = [(x / hap) for x in all_data]
+    mapped_data = [(x[1] / hap) for x in all_data]
     max_val = math.ceil(max(mapped_data))
     min_val = math.floor(min(mapped_data))
 

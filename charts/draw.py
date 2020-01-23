@@ -37,14 +37,6 @@ def get_height(conf, sample_count):
     return histo_height + lines_height + bars_height
 
 
-def add_chart_to_page(page, chart):
-    if page.value is None:
-        page.value = [chart]
-    else:
-        page.value.append(chart)
-    return page
-
-
 def svg_file(conf):
     return "%s/smn_charts.svg" % conf["output_dir"]
 
@@ -128,8 +120,6 @@ def main(conf):
 
     write_svg(conf, pop_data, sample_data)
     write_pdf(conf, pop_data, sample_data)
-    # write_pdf(conf)
-    # write_png(conf)
 
 
 if __name__ == "__main__":
