@@ -1,3 +1,5 @@
+import math
+
 from charts.colors import color_arr
 from charts.scale import scale, y_scale
 
@@ -226,19 +228,26 @@ def y_axis_tics(x_axis, y_axis, side):
     return tics
 
 
+def zeroes(value, result=1):
+    if value < 10:
+        return result
+    else:
+        return zeroes(value/10, result=result+1)
+
+
 def y_axis_text(x_axis, y_axis, side):
     if side == "left":
-        x = scale(x_axis["min"], x_axis) - 30
+        x = scale(x_axis["min"], x_axis) - 8
     else:
         x = scale(x_axis["max"], x_axis) + 6
     txt = []
     for tic in y_axis["tics"]:
+        z = zeroes(tic)
+        r = x
+        if side == "left":
+            r = x - (z * 8)
         txt.append(
-            text(
-                x,
-                y_scale(tic, y_axis) + 3,
-                "%s" % tic
-            )
+            text(r, y_scale(tic, y_axis) + 3, "%s" % tic)
         )
 
     return txt
@@ -246,16 +255,20 @@ def y_axis_text(x_axis, y_axis, side):
 
 def y_axis_title(x_axis, y_axis, side):
     if side == "left":
-        y = 30
+        y = 45
+        x = -(y_scale(y_axis["min"], y_axis))
+        transform = "rotate(270)"
     else:
-        y = scale(x_axis["max"], x_axis) + 40
+        y = -35 - scale(x_axis["max"], x_axis)
+        x = y_scale(y_axis["max"], y_axis)
+        transform = "rotate(90)"
     return [
         text(
-            -(y_scale(y_axis["min"], y_axis)),
+            x,
             y,
             y_axis["title"],
             style="font: 18px sans-serif",
-            transform="rotate(270)"
+            transform=transform
         )
     ]
 
@@ -275,6 +288,7 @@ def get_keys(key_items, x_axis, y_axis, element_type="line"):
     keys = []
     x = scale(x_axis["max"], x_axis) + 60
     y = y_scale(y_axis["max"], y_axis)
+
     for idx, key in enumerate(key_items):
         color = color_arr[idx % len(color_arr)]
         y_val = y + (15 * (idx + 1))

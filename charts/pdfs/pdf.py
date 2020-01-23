@@ -149,20 +149,22 @@ def x_axis_title(x_axis, y_axis):
 
 def y_axis_text(x_axis, y_axis, side):
     if side == "left":
-        x1 = scale(x_axis["min"], x_axis) - 5
+        x = scale(x_axis["min"], x_axis) - 5
+        anchor = "end"
     else:
-        x1 = scale(x_axis["max"], x_axis) + 8
+        x = scale(x_axis["max"], x_axis) + 5
+        anchor = "start"
 
     txt = []
     for tic in y_axis["tics"]:
         txt.append(
             String(
-                x1,
+                x,
                 scale(tic, y_axis) - 2,
                 "%s" % tic,
                 fontSize=8,
                 fontName="Helvetica",
-                textAnchor="end"
+                textAnchor=anchor
             )
         )
 
@@ -171,17 +173,19 @@ def y_axis_text(x_axis, y_axis, side):
 
 def y_axis_title(x_axis, y_axis, side):
     if side == "left":
-        x = -(scale(y_axis["max"], y_axis))
-        y = 16
+        x = scale(y_axis["min"], y_axis)
+        y = -(scale(x_axis["min"], x_axis)) + 20
+        tf = rotate(90)
     else:
-        x = -(scale(y_axis["max"], y_axis)) - 10
-        y = scale(x_axis["max"], x_axis) + 12
+        x = -(scale(y_axis["max"], y_axis))
+        y = scale(x_axis["max"], x_axis) + 20
+        tf = rotate(270)
     return [
         String(
             x,
             y,
             y_axis["title"],
-            transform=rotate(270),
+            transform=tf,
             fontSize=11,
             fontName="Helvetica"
         )
@@ -202,13 +206,13 @@ def title(txt, x_axis, y_axis):
 
 def get_keys(key_items, x_axis, y_axis, element_type="line"):
     keys = []
-    x = scale(x_axis["max"], x_axis) + 20
+    x = scale(x_axis["max"], x_axis) + 30
     y = scale(y_axis["max"], y_axis)
     for idx, key in enumerate(key_items):
         color = color_arr[idx % len(color_arr)]
         y_val = y - (15 * (idx + 1))
         keys.append(get_key_symbol(x, y_val, element_type, color))
-        keys.append(String(x + 12, y_val, key, fontName="Helvetica", fontSize=8))
+        keys.append(String(x + 14, y_val, key, fontName="Helvetica", fontSize=8))
 
     return keys
 

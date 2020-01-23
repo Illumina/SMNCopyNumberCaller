@@ -1,6 +1,7 @@
 import math
 import charts.svgs.svg_histogram as svg_histo
 import charts.pdfs.pdf_histogram as pdf_histo
+import charts.scale as scale
 
 
 class ConfigException(Exception):
@@ -34,23 +35,11 @@ def get_x_axis(pop_data, width, padding):
     minimum = 0
     maximum = math.ceil(max(pop_data.keys())) + 1
 
-    return {
-        "min": minimum,
-        "max": maximum,
-        "tics": range(minimum, maximum),
-        "title": "Copy Number",
-        "domain": [padding, width - padding]
-    }
+    return scale.axis([minimum, maximum], [padding, width - padding], "Copy Number", tics=8)
 
 
 def get_y_axis(pop_data, height, padding):
     minimum = 0
     maximum = math.ceil(max(pop_data.values())) + 1
 
-    return {
-        "min": minimum,
-        "max": maximum,
-        "tics": range(minimum, maximum, 20),
-        "title": "Sample Count",
-        "domain": [padding, height - padding]
-    }
+    return scale.axis([minimum, maximum], [padding, height - padding], "Sample Count")
