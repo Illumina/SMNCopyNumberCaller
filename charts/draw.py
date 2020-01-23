@@ -46,12 +46,14 @@ def write_pdf(conf, pop_data, sample_data):
         sample_col_map = util.get_sample_col_map(sample_data, col)
         hist = histo.get_histogram(pop_col, sample_col_map, conf, col, "pdf")
         elements.append(pdf.add_chart_to_page(drawing, hist))
+        elements.append(Drawing(15, 15))
 
     for col in conf["line_charts"]["columns"]:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
         sample_col_map = util.get_sample_col_map(sample_data, col)
         chart = line_chart.get_line_chart(sample_col_map, conf, col, "pdf")
         elements.append(pdf.add_chart_to_page(drawing, chart))
+        elements.append(Drawing(12, 15))
 
     for sample in sample_data:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
@@ -59,6 +61,7 @@ def write_pdf(conf, pop_data, sample_data):
         sam["sample"] = sample
         bars = bar_chart.get_bar_chart(conf, sam, "pdf")
         elements.append(pdf.add_chart_to_page(drawing, bars))
+        elements.append(Drawing(12, 15))
 
     page.build(elements)
 
