@@ -1,26 +1,31 @@
-import charts.svg as svg
-from charts.scale import x_scale, y_scale
+import charts.svgs.svg as svg
+from charts.scale import scale, y_scale
 from charts.colors import colors, color_arr
 
 
-def get_svg(sample_data, x_axis, y_axis, norm_y_axis, cols):
+def get_svg(sample_data, conf, x_axis, y_axis, norm_y_axis, cols):
     chart = svg.headers()
 
     svg_bars = []
     svg_bars += svg.x_axis_lines(x_axis, y_axis)
     svg_bars += svg.x_axis_tics(x_axis, y_axis)
-    svg_bars += svg.y_axis_lines(x_axis, y_axis)
-    svg_bars += svg.y_axis_tics(x_axis, y_axis)
     svg_bars += svg.x_axis_text(x_axis, y_axis)
     svg_bars += svg.x_axis_title(x_axis, y_axis)
-    svg_bars += svg.y_axis_text(x_axis, y_axis)
-    svg_bars += svg.y_axis_title(y_axis)
+    svg_bars += svg.y_axis_lines(x_axis, y_axis)
+    svg_bars += svg.y_axis_tics(x_axis, y_axis, "left")
+    svg_bars += svg.y_axis_text(x_axis, y_axis, "left")
+    svg_bars += svg.y_axis_title(x_axis, y_axis, "left")
+    svg_bars += svg.y_axis_tics(x_axis, norm_y_axis, "right")
+    svg_bars += svg.y_axis_text(x_axis, norm_y_axis, "right")
+    svg_bars += svg.y_axis_title(x_axis, norm_y_axis, "right")
     svg_bars += sample_bars(sample_data, x_axis, y_axis, cols)
     svg_bars += sample_lines(sample_data, x_axis, norm_y_axis, cols)
     svg_bars += svg.title(sample_data["sample"], x_axis)
     svg_bars += svg.get_keys(cols, x_axis, y_axis, element_type="rect")
 
     chart.value = svg_bars
+    chart.add_attr(["x", "0"])
+    chart.add_attr(["y", "%s" % (conf["index"] * (conf["height"] + conf["padding"]))])
     return chart
 
 
@@ -45,8 +50,8 @@ def sample_lines(sample_data, x_axis, y_axis, cols):
     smn1_points = []
     smn2_points = []
     for i in range(0, len(smn1)):
-        smn1_points.append("%s,%s" % (x_scale(i + 0.8, x_axis), y_scale(smn1[i], y_axis)))
-        smn2_points.append("%s,%s" % (x_scale(i + 1.2, x_axis), y_scale(smn2[i], y_axis)))
+        smn1_points.append("%s,%s" % (scale(i + 0.8, x_axis), y_scale(smn1[i], y_axis)))
+        smn2_points.append("%s,%s" % (scale(i + 1.2, x_axis), y_scale(smn2[i], y_axis)))
 
     smn1_line = svg.path(smn1_points, color=color_arr[0])
     smn2_line = svg.path(smn2_points, color=color_arr[1])
@@ -55,8 +60,8 @@ def sample_lines(sample_data, x_axis, y_axis, cols):
 
 
 def get_bar(i, val, x_axis, y_axis, color):
-    width = x_scale(2, x_axis) - x_scale(1.6, x_axis)
+    width = scale(2, x_axis) - scale(1.6, x_axis)
     y = y_scale(val, y_axis)
     height = y_scale(y_axis["min"], y_axis) - y
-    x = x_scale(i, x_axis)
+    x = scale(i, x_axis)
     return svg.rect(x, y, width, height, border_color=colors["grey"], fill_color=color, opacity=0.7)

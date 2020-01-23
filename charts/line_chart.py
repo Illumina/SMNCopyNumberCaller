@@ -1,7 +1,7 @@
-import json
 import math
 
-import charts.svg_line_chart as svg_line
+import charts.svgs.svg_line_chart as svg_line
+import charts.pdfs.pdf_line_chart as pdf_line
 from functools import reduce
 
 
@@ -9,7 +9,7 @@ class LineConfigException(Exception):
     pass
 
 
-def get_line_chart(sample_data, config, col, idx):
+def get_line_chart(sample_data, config, col, fmt):
     width = config["width"]
     height = config["height"]
     padding = config["padding"]
@@ -17,10 +17,10 @@ def get_line_chart(sample_data, config, col, idx):
     x_axis = get_line_x_axis(sample_data, width, padding)
     y_axis = get_line_y_axis(sample_data, height, padding)
 
-    chart = svg_line.get_svg(sample_data, x_axis, y_axis, col=col)
-    chart.add_attr(["x", "0"])
-    chart.add_attr(["y", "%s" % (idx * (height + padding))])
-    return chart
+    if fmt == "svg":
+        return svg_line.get_svg(sample_data, config, x_axis, y_axis, col=col)
+    elif fmt == "pdf":
+        return pdf_line.get_pdf(sample_data, x_axis, y_axis, col=col)
 
 
 def get_line_x_axis(sample_data, width, padding):

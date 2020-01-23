@@ -1,12 +1,13 @@
 import math
-import charts.svg_histogram as svg_histo
+import charts.svgs.svg_histogram as svg_histo
+import charts.pdfs.pdf_histogram as pdf_histo
 
 
 class ConfigException(Exception):
     pass
 
 
-def get_histogram(pop_data, sample_data, config, col, idx):
+def get_histogram(pop_data, sample_data, config, col, fmt):
     width = config["width"]
     height = config["height"]
     padding = config["padding"]
@@ -14,10 +15,10 @@ def get_histogram(pop_data, sample_data, config, col, idx):
     x_axis = get_x_axis(pop_data, width, padding)
     y_axis = get_y_axis(pop_data, height, padding)
 
-    histogram = svg_histo.get_svg(pop_data, sample_data, x_axis, y_axis, col=col)
-    histogram.add_attr(["x", "0"])
-    histogram.add_attr(["y", "%s" % (idx * (height + padding))])
-    return histogram
+    if fmt == "svg":
+        return svg_histo.get_svg(pop_data, sample_data, config, x_axis, y_axis, col=col)
+    elif fmt == "pdf":
+        return pdf_histo.get_pdf(pop_data, sample_data, config, x_axis, y_axis, col=col)
 
 
 def add_to_map(data_map, key):

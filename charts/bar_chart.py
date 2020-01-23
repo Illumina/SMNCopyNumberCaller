@@ -1,8 +1,9 @@
-import charts.svg_bar as svg_bar
+import charts.svgs.svg_bar as svg_bar
+import charts.pdfs.pdf_bar as pdf_bar
 import math
 
 
-def get_bar_chart(conf, sample_data, idx):
+def get_bar_chart(conf, sample_data, fmt):
     width = conf["width"]
     height = conf["height"]
     padding = conf["padding"]
@@ -12,11 +13,10 @@ def get_bar_chart(conf, sample_data, idx):
     y_axis = get_bar_y_axis(sample_data, cols, height, padding)
     norm_y_axis = get_normalised_y_axis(sample_data, cols, height, padding)
 
-    chart = svg_bar.get_svg(sample_data, x_axis, y_axis, norm_y_axis, cols)
-
-    chart.add_attr(["x", "0"])
-    chart.add_attr(["y", "%s" % (idx * (height + padding))])
-    return chart
+    if fmt == "svg":
+        return svg_bar.get_svg(sample_data, conf, x_axis, y_axis, norm_y_axis, cols)
+    elif fmt == "pdf":
+        return pdf_bar.get_pdf(sample_data, x_axis, y_axis, norm_y_axis, cols)
 
 
 def get_bar_x_axis(sample_data, cols, width, padding):
@@ -56,6 +56,6 @@ def get_normalised_y_axis(sample_data, cols, height, padding):
         "min": min_val,
         "max": max_val,
         "tics": range(min_val, max_val + 1),
-        "title": "Read Count",
+        "title": "Normalized Depth",
         "domain": [padding, height - padding]
     }

@@ -1,5 +1,5 @@
 from charts.colors import color_arr
-from charts.scale import x_scale, y_scale
+from charts.scale import scale, y_scale
 
 
 class SvgElement:
@@ -115,7 +115,7 @@ def headers(height=None):
 def x_axis_lines(x_axis, y_axis):
     lines = []
     for tic in x_axis["tics"]:
-        x = x_scale(tic, x_axis)
+        x = scale(tic, x_axis)
         lines.append(
             line(
                 x,
@@ -133,9 +133,9 @@ def x_axis_lines(x_axis, y_axis):
 def x_axis_tics(x_axis, y_axis):
     tics = [
         line(
-            x_scale(x_axis["tics"][0], x_axis),
+            scale(x_axis["tics"][0], x_axis),
             y_scale(y_axis["min"], y_axis),
-            x_scale(x_axis["tics"][0], x_axis),
+            scale(x_axis["tics"][0], x_axis),
             y_scale(y_axis["max"], y_axis)
         )
     ]
@@ -143,9 +143,9 @@ def x_axis_tics(x_axis, y_axis):
     for tic in x_axis["tics"]:
         tics.append(
             line(
-                x_scale(tic, x_axis),
+                scale(tic, x_axis),
                 y_scale(y_axis["min"], y_axis),
-                x_scale(tic, x_axis),
+                scale(tic, x_axis),
                 y_scale(y_axis["min"], y_axis) + 6
             )
         )
@@ -158,7 +158,7 @@ def x_axis_text(x_axis, y_axis):
     for tic in x_axis["tics"]:
         txt.append(
             text(
-                x_scale(tic, x_axis) - 4,
+                scale(tic, x_axis) - 4,
                 y_scale(y_axis["min"], y_axis) + 18,
                 "%s" % tic
             )
@@ -171,7 +171,7 @@ def x_axis_title(x_axis, y_axis):
     x = ((x_axis["max"] - x_axis["min"]) / 2) + x_axis["min"]
     return [
         text(
-            x_scale(x, x_axis) - (len(x_axis["title"]) * 6),
+            scale(x, x_axis) - (len(x_axis["title"]) * 6),
             y_scale(y_axis["min"], y_axis) + 34,
             x_axis["title"],
             style="font: 18px sans-serif"
@@ -185,9 +185,9 @@ def y_axis_lines(x_axis, y_axis):
         y = y_scale(tic, y_axis)
         lines.append(
             line(
-                x_scale(x_axis["min"], x_axis),
+                scale(x_axis["min"], x_axis),
                 y,
-                x_scale(x_axis["max"], x_axis),
+                scale(x_axis["max"], x_axis),
                 y,
                 opacity=0.5,
                 dashes=3
@@ -197,21 +197,28 @@ def y_axis_lines(x_axis, y_axis):
     return lines
 
 
-def y_axis_tics(x_axis, y_axis):
+def y_axis_tics(x_axis, y_axis, side):
+    if side == "left":
+        x1 = scale(x_axis["min"], x_axis) - 6
+        x2 = scale(x_axis["min"], x_axis)
+    else:
+        x1 = scale(x_axis["max"], x_axis)
+        x2 = scale(x_axis["max"], x_axis) + 4
+
     tics = [
         line(
-            x_scale(x_axis["min"], x_axis),
+            scale(x_axis["min"], x_axis),
             y_scale(y_axis["min"], y_axis),
-            x_scale(x_axis["max"], x_axis),
+            scale(x_axis["max"], x_axis),
             y_scale(y_axis["min"], y_axis)
         )
     ]
     for tic in y_axis["tics"]:
         tics.append(
             line(
-                x_scale(x_axis["min"], x_axis) - 6,
+                x1,
                 y_scale(tic, y_axis),
-                x_scale(x_axis["min"], x_axis),
+                x2,
                 y_scale(tic, y_axis)
             )
         )
@@ -219,12 +226,16 @@ def y_axis_tics(x_axis, y_axis):
     return tics
 
 
-def y_axis_text(x_axis, y_axis):
+def y_axis_text(x_axis, y_axis, side):
+    if side == "left":
+        x = scale(x_axis["min"], x_axis) - 30
+    else:
+        x = scale(x_axis["max"], x_axis) + 6
     txt = []
     for tic in y_axis["tics"]:
         txt.append(
             text(
-                x_scale(x_axis["min"], x_axis) - 30,
+                x,
                 y_scale(tic, y_axis) + 3,
                 "%s" % tic
             )
@@ -233,11 +244,15 @@ def y_axis_text(x_axis, y_axis):
     return txt
 
 
-def y_axis_title(y_axis):
+def y_axis_title(x_axis, y_axis, side):
+    if side == "left":
+        y = 30
+    else:
+        y = scale(x_axis["max"], x_axis) + 40
     return [
         text(
             -(y_scale(y_axis["min"], y_axis)),
-            30,
+            y,
             y_axis["title"],
             style="font: 18px sans-serif",
             transform="rotate(270)"
@@ -248,7 +263,7 @@ def y_axis_title(y_axis):
 def title(txt, x_axis):
     return [
         text(
-            x_scale(x_axis["min"], x_axis),
+            scale(x_axis["min"], x_axis),
             30,
             txt,
             style="font: 22px sans-serif",
@@ -258,7 +273,7 @@ def title(txt, x_axis):
 
 def get_keys(key_items, x_axis, y_axis, element_type="line"):
     keys = []
-    x = x_scale(x_axis["max"], x_axis) + 5
+    x = scale(x_axis["max"], x_axis) + 60
     y = y_scale(y_axis["max"], y_axis)
     for idx, key in enumerate(key_items):
         color = color_arr[idx % len(color_arr)]
@@ -275,3 +290,11 @@ def get_key_symbol(x, y, element_type, color):
         "circle": circle(x + 10, y - 4, 4, fill_color=color, border_color=color),
         "rect": rect(x + 6, y - 8, 8, 8, fill_color=color),
     }[element_type]
+
+
+def add_chart_to_page(page, chart):
+    if page.value is None:
+        page.value = [chart]
+    else:
+        page.value.append(chart)
+    return page
