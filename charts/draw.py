@@ -1,6 +1,4 @@
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import ParagraphStyle
-
 from charts.scale import pdf_scale
 import charts.histogram as histo
 import charts.svgs.svg as svg
@@ -9,25 +7,7 @@ import charts.bar_chart as bar_chart
 import charts.data_utils as util
 import charts.pdfs.pdf as pdf
 from reportlab.graphics.shapes import Drawing
-from reportlab.platypus import SimpleDocTemplate, KeepTogether, Frame, Paragraph
-
-config = {
-    "width": 800,
-    "height": 200,
-    "padding": 40,
-    "pop_file": "/Users/awarren/Documents/Illumina/XiaoSMN/SMN_1kGP_results.tsv",
-    "sample_file": "/Users/awarren/Documents/Illumina/XiaoSMN/SMN.json",
-    "histograms": {
-        "columns": ["Total_CN_raw", "Full_length_CN_raw"]
-    },
-    "line_charts": {
-        "columns": ["SMN1_CN_raw"]
-    },
-    "bar_charts": {
-        "columns": ["SMN1_read_support", "SMN2_read_support"]
-    },
-    "output_dir": "/Users/awarren/Desktop/"
-}
+from reportlab.platypus import SimpleDocTemplate
 
 
 def get_height(conf, sample_count):
@@ -112,18 +92,3 @@ def write_svg(conf, pop_data, sample_data):
 
     with open(svg_file(conf), 'w') as fo:
         fo.write(page.to_string())
-
-
-def main(conf):
-    pop_data = util.read_pop_data(conf["pop_file"])
-    sample_data = util.read_sample_data(conf["sample_file"])
-
-    write_svg(conf, pop_data, sample_data)
-    write_pdf(conf, pop_data, sample_data)
-
-
-if __name__ == "__main__":
-    main(config)
-
-
-
