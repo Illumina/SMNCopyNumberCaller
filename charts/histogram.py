@@ -12,14 +12,18 @@ def get_histogram(pop_data, sample_data, config, col, fmt):
     width = config["width"]
     height = config["height"]
     padding = config["padding"]
+    header = {
+        "Total_CN_raw": "SMN1 Exons 1-6",
+        "Full_length_CN_raw": "SMN1 Exons 7-8"
+    }
 
     x_axis = get_x_axis(pop_data, width, padding)
     y_axis = get_y_axis(pop_data, height, padding)
 
     if fmt == "svg":
-        return svg_histo.get_svg(pop_data, sample_data, config, x_axis, y_axis, col=col)
+        return svg_histo.get_svg(pop_data, sample_data, config, x_axis, y_axis, col=col, header=header[col])
     elif fmt == "pdf":
-        return pdf_histo.get_pdf(pop_data, sample_data, config, x_axis, y_axis, col=col)
+        return pdf_histo.get_pdf(pop_data, sample_data, x_axis, y_axis, col=col, header=header[col])
 
 
 def add_to_map(data_map, key):

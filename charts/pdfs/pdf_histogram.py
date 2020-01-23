@@ -4,7 +4,7 @@ from charts.scale import scale
 from reportlab.graphics.shapes import Line
 
 
-def get_pdf(pop_data, sample_data, config, x_axis, y_axis, col="Total_CN_raw"):
+def get_pdf(pop_data, sample_data, x_axis, y_axis, col="Total_CN_raw", header=None):
     pdf_items = []
     pdf_items += pdf.x_axis_lines(x_axis, y_axis)
     pdf_items += pdf.x_axis_tics(x_axis, y_axis)
@@ -16,7 +16,10 @@ def get_pdf(pop_data, sample_data, config, x_axis, y_axis, col="Total_CN_raw"):
     pdf_items += pdf.y_axis_title(x_axis, y_axis, "left")
     pdf_items += histogram_lines(pop_data, x_axis, y_axis)
     pdf_items += sample_lines(sample_data, x_axis, y_axis)
-    pdf_items += pdf.title("%s" % col, x_axis, y_axis)
+    if header is not None:
+        pdf_items += pdf.title("%s" % header, x_axis, y_axis)
+    else:
+        pdf_items += pdf.title("%s" % col, x_axis, y_axis)
     pdf_items += pdf.get_keys([key for key in sample_data], x_axis, y_axis)
     return pdf_items
 

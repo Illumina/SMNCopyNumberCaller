@@ -3,7 +3,7 @@ from charts.scale import scale, y_scale
 from charts.colors import colors, color_arr
 
 
-def get_svg(pop_data, sample_data, config, x_axis, y_axis, col="Total_CN_raw"):
+def get_svg(pop_data, sample_data, config, x_axis, y_axis, col="Total_CN_raw", header=None):
     chart = svg.headers()
 
     svg_lines = []
@@ -17,7 +17,10 @@ def get_svg(pop_data, sample_data, config, x_axis, y_axis, col="Total_CN_raw"):
     svg_lines += svg.y_axis_title(x_axis, y_axis, "left")
     svg_lines += histogram_lines(pop_data, x_axis, y_axis)
     svg_lines += sample_lines(sample_data, x_axis, y_axis)
-    svg_lines += svg.title("%s" % col, x_axis)
+    if header is not None:
+        svg_lines += svg.title("%s" % header, x_axis)
+    else:
+        svg_lines += svg.title("%s" % col, x_axis)
     svg_lines += svg.get_keys([key for key in sample_data], x_axis, y_axis)
 
     chart.value = svg_lines
