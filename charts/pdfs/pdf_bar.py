@@ -17,16 +17,17 @@ def get_pdf(sample, x_axis, y_axis, norm_y_axis, cols):
     pdf_bars += pdf.y_axis_tics(x_axis, norm_y_axis, "left")
     pdf_bars += pdf.y_axis_text(x_axis, norm_y_axis, "left")
     pdf_bars += pdf.y_axis_title(x_axis, norm_y_axis, "left")
-    pdf_bars += sample_bars(sample, x_axis, y_axis, cols)
-    pdf_bars += sample_lines(sample, x_axis, norm_y_axis, cols)
+    pdf_bars += sample_bars(sample, x_axis, norm_y_axis, cols)
+    # pdf_bars += sample_lines(sample, x_axis, norm_y_axis, cols)
     pdf_bars += pdf.title(title, x_axis, y_axis)
     pdf_bars += pdf.get_keys(cols, x_axis, y_axis, element_type="rect")
     return pdf_bars
 
 
 def sample_bars(sample_data, x_axis, y_axis, cols):
-    smn1 = sample_data[cols[0]]
-    smn2 = sample_data[cols[1]]
+    hap = sample_data["Median_depth"] / 2
+    smn1 = [(x, y / hap) for x, y in sample_data[cols[0]]]
+    smn2 = [(x, y / hap) for x, y in sample_data[cols[1]]]
 
     bars = []
     for x_val, y_val in smn1:
@@ -62,9 +63,9 @@ def sample_lines(sample_data, x_axis, y_axis, cols):
     return [smn1_line, smn2_line]
 
 
-def get_bar(x_val, val, x_axis, y_axis, color):
+def get_bar(x_val, y_val, x_axis, y_axis, color):
     width = scale(2, x_axis) - scale(1.6, x_axis)
-    y = scale(val, y_axis)
+    y = scale(y_val, y_axis)
     height = scale(y_axis["min"], y_axis) - y
     x = scale(x_val, x_axis)
     return pdf.rect(x, y, width, height, border_color=colors["grey"], fill_color=color, opacity=0.6)

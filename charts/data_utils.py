@@ -66,3 +66,12 @@ def get_sample_col_map(sample_data, column):
         result[sample] = sample_data[sample][column]
 
     return result
+
+
+def get_key_map(keys, data):
+    result = {}
+    for key in keys:
+        for d_key in data:
+            result[key] = data[d_key][key]
+
+    return result

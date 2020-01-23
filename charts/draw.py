@@ -12,7 +12,7 @@ from reportlab.platypus import SimpleDocTemplate
 
 def get_height(conf, sample_count):
     histo_height = len(conf["histograms"]["columns"]) * (conf["height"] + conf["padding"])
-    lines_height = len(conf["line_charts"]["columns"]) * (conf["height"] + conf["padding"])
+    lines_height = sample_count * (conf["height"] + conf["padding"])
     bars_height = sample_count * (conf["height"] + conf["padding"])
     return histo_height + lines_height + bars_height
 
@@ -31,6 +31,8 @@ def pdf_file(conf):
 
 def write_pdf(conf, pop_data, sample_data):
     conf = pdf_scale(conf)
+    chart_spacing = 50
+
     page = SimpleDocTemplate(
         pdf_file(conf),
         pagesize=letter,
@@ -39,29 +41,39 @@ def write_pdf(conf, pop_data, sample_data):
     )
 
     elements = []
+    idx = 0
+
+    def add_space():
+        if idx == 0:
+            return
+        else:
+            elements.append(Drawing(100, chart_spacing))
 
     for col in conf["histograms"]["columns"]:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
         pop_col = util.get_pop_column(pop_data, col)
         sample_col_map = util.get_sample_col_map(sample_data, col)
         hist = histo.get_histogram(pop_col, sample_col_map, conf, col, "pdf")
+        add_space()
         elements.append(pdf.add_chart_to_page(drawing, hist))
-        elements.append(Drawing(15, 15))
+        idx += 1
 
-    for col in conf["line_charts"]["columns"]:
+    for sample in sample_data:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
-        sample_col_map = util.get_sample_col_map(sample_data, col)
-        chart = line_chart.get_line_chart(sample_col_map, conf, col, "pdf")
+        col_map = util.get_key_map(conf["line_charts"]["columns"], sample_data)
+        chart = line_chart.get_line_chart(col_map, conf, sample, "pdf")
+        add_space()
         elements.append(pdf.add_chart_to_page(drawing, chart))
-        elements.append(Drawing(12, 15))
+        idx += 1
 
     for sample in sample_data:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
         sam = sample_data[sample]
         sam["sample"] = sample
         bars = bar_chart.get_bar_chart(conf, sam, "pdf")
+        add_space()
         elements.append(pdf.add_chart_to_page(drawing, bars))
-        elements.append(Drawing(12, 15))
+        idx += 1
 
     page.build(elements)
 
@@ -78,10 +90,10 @@ def write_svg(conf, pop_data, sample_data):
         idx += 1
         page = svg.add_chart_to_page(page, hist)
 
-    for col in conf["line_charts"]["columns"]:
+    for sample in sample_data:
         conf["index"] = idx
-        sample_col_map = util.get_sample_col_map(sample_data, col)
-        chart = line_chart.get_line_chart(sample_col_map, conf, col, "svg")
+        col_map = util.get_key_map(conf["line_charts"]["columns"], sample_data)
+        chart = line_chart.get_line_chart(col_map, conf, sample, "svg")
         idx += 1
         page = svg.add_chart_to_page(page, chart)
 
