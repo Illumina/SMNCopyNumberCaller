@@ -25,6 +25,7 @@ def get_svg(sample, conf, x_axis, y_axis, norm_y_axis, cols):
     svg_bars += sample_bars(sample, x_axis, norm_y_axis, cols)
     svg_bars += svg.title(title, x_axis)
     svg_bars += svg.get_keys(cols, x_axis, y_axis, element_type="rect")
+    svg_bars += svg.add_star_to_13(x_axis, y_axis)
 
     chart.value = svg_bars
     chart.add_attr(["x", "0"])

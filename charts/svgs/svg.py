@@ -94,6 +94,12 @@ def path(points, color="black", thickness=1, dashes=0, opacity=1.0):
     ])
 
 
+def add_star_to_13(x_axis, y_axis):
+    x = scale(13, x_axis) - 10
+    y = y_scale(y_axis["min"], y_axis) + 20
+    return [text(x, y, "*", style="font: 16px sans-serif")]
+
+
 def add_tooltip(element, txt):
     title_el = SvgElement("title", [], txt)
     if element.value is None:

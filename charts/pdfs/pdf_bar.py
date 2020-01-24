@@ -21,6 +21,7 @@ def get_pdf(sample, x_axis, y_axis, norm_y_axis, cols):
     pdf_bars += sample_bars(sample, x_axis, norm_y_axis, cols)
     pdf_bars += pdf.title(title, x_axis, y_axis)
     pdf_bars += pdf.get_keys(cols, x_axis, y_axis, element_type="rect")
+    pdf_bars += pdf.add_star_to_13(x_axis, y_axis)
     return pdf_bars
 
 

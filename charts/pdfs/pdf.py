@@ -242,3 +242,15 @@ def right_axis_line(x_axis, y_axis):
             strokeWidth=0.5
         )
     ]
+
+
+def add_star_to_13(x_axis, y_axis):
+    return [
+        String(
+            scale(13, x_axis) - 7,
+            scale(y_axis["min"], y_axis) - 14,
+            "*",
+            fontSize=14,
+            fontName="Helvetica"
+        )
+    ]

@@ -20,6 +20,7 @@ def get_svg(data, config, x_axis, y_axis, col="SMN1_CN_raw"):
     svg_lines += circles(data, x_axis, y_axis)
     svg_lines += svg.title("%s" % col, x_axis)
     svg_lines += svg.get_keys([key for key in data], x_axis, y_axis, element_type="circle")
+    svg_lines += svg.add_star_to_13(x_axis, y_axis)
 
     line_chart.value = svg_lines
     line_chart.add_attr(["x", "0"])
