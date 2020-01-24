@@ -36,7 +36,8 @@ def histogram_lines(pop_data, x_axis, y_axis):
                 x,
                 scale(0, y_axis),
                 strokeColor=colors["grey"],
-                strokeOpacity=0.3
+                strokeOpacity=0.3,
+                strokeWidth=0.5
             )
         )
     return histo_lines

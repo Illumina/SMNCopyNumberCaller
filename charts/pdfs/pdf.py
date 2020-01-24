@@ -14,7 +14,7 @@ def circle(x, y, r, fill_color="#000000", border_color="#000000", border_width=1
 
 
 def path(points, color):
-    return PolyLine(points, strokeColor=color)
+    return PolyLine(points, strokeColor=color, strokeWidth=0.5)
 
 
 def rect(x, y, width, height, border_color, fill_color, opacity):
@@ -25,7 +25,8 @@ def rect(x, y, width, height, border_color, fill_color, opacity):
                 strokeColor=border_color,
                 fillColor=fill_color,
                 strokeOpacity=opacity,
-                fillOpacity=opacity
+                fillOpacity=opacity,
+                strokeWidth=0.5
                 )
 
 
@@ -40,7 +41,8 @@ def x_axis_lines(x_axis, y_axis):
                 x,
                 scale(y_axis["max"], y_axis),
                 strokeDashArray=[2, 2],
-                strokeOpacity=0.4
+                strokeOpacity=0.4,
+                strokeWidth=0.5
             )
         )
 
@@ -50,10 +52,11 @@ def x_axis_lines(x_axis, y_axis):
 def x_axis_tics(x_axis, y_axis):
     tics = [
         Line(
-            scale(x_axis["tics"][0], x_axis),
+            scale(x_axis["min"], x_axis),
             scale(y_axis["min"], y_axis),
-            scale(x_axis["tics"][0], x_axis),
-            scale(y_axis["max"], y_axis)
+            scale(x_axis["min"], x_axis),
+            scale(y_axis["max"], y_axis),
+            strokeWidth=0.5
         )
     ]
 
@@ -63,7 +66,8 @@ def x_axis_tics(x_axis, y_axis):
                 scale(tic, x_axis),
                 scale(y_axis["min"], y_axis),
                 scale(tic, x_axis),
-                scale(y_axis["min"], y_axis) - 4
+                scale(y_axis["min"], y_axis) - 4,
+                strokeWidth=0.5
             )
         )
 
@@ -81,7 +85,8 @@ def y_axis_lines(x_axis, y_axis):
                 scale(x_axis["max"], x_axis),
                 y,
                 strokeOpacity=0.4,
-                strokeDashArray=[2, 2]
+                strokeDashArray=[2, 2],
+                strokeWidth=0.5
             )
         )
 
@@ -101,7 +106,8 @@ def y_axis_tics(x_axis, y_axis, side):
             scale(x_axis["min"], x_axis),
             scale(y_axis["min"], y_axis),
             scale(x_axis["max"], x_axis),
-            scale(y_axis["min"], y_axis)
+            scale(y_axis["min"], y_axis),
+            strokeWidth=0.5
         )
     ]
 
@@ -111,7 +117,8 @@ def y_axis_tics(x_axis, y_axis, side):
                 x1,
                 scale(tic, y_axis),
                 x2,
-                scale(tic, y_axis)
+                scale(tic, y_axis),
+                strokeWidth=0.5
             )
         )
 
@@ -223,3 +230,15 @@ def get_key_symbol(x, y, element_type, color):
         "circle": Circle(x + 6, y + 3, 2, fillColor=color, strokeColor=color),
         "rect": Rect(x + 6, y, 4, 4, fillColor=color),
     }[element_type]
+
+
+def right_axis_line(x_axis, y_axis):
+    return [
+        Line(
+            scale(x_axis["max"], x_axis),
+            scale(y_axis["min"], y_axis),
+            scale(x_axis["max"], x_axis),
+            scale(y_axis["max"], y_axis),
+            strokeWidth=0.5
+        )
+    ]

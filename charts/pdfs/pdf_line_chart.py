@@ -31,7 +31,7 @@ def sample_paths(sample_data, x_axis, y_axis):
             points.append(scale(value[1], y_axis))
 
         color = color_arr[idx % len(color_arr)]
-        paths.append(PolyLine(points, strokeColor=color, fillColor=color, strokeOpacity=1.0))
+        paths.append(PolyLine(points, strokeColor=color, fillColor=color, strokeOpacity=1.0, strokeWidth=0.5))
 
     return paths
 
@@ -44,7 +44,7 @@ def circles(sample_data, x_axis, y_axis):
             circle = pdf.circle(
                     scale(value[0], x_axis),
                     scale(value[1], y_axis),
-                    3,
+                    2,
                     fill_color=colour,
                     border_color=colour
             )

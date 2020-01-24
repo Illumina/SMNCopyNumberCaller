@@ -68,7 +68,6 @@ def write_pdf(conf, pop_data, sample_data):
         elements.append(pdf.add_chart_to_page(drawing, chart))
         idx += 1
 
-    for sample in sample_data:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
         sam = sample_data[sample]
         sam["sample"] = sample
@@ -101,7 +100,6 @@ def write_svg(conf, pop_data, sample_data):
         idx += 1
         page = svg.add_chart_to_page(page, chart)
 
-    for sample in sample_data:
         conf["index"] = idx
         sam = sample_data[sample]
         sam["sample"] = sample

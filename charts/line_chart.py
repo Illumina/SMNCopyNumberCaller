@@ -27,7 +27,12 @@ def get_line_x_axis(data, width, padding):
     sam = next(iter(data))
     minimum = min([x[0] for x in data[sam]]) - 1
     maximum = max([x[0] for x in data[sam]]) + 1
-    return scale.axis([minimum, maximum], [padding, width - padding], "Site Number", tics=11)
+    return scale.axis(
+        [minimum, maximum],
+        [padding, width - padding],
+        "Site Number",
+        tic_values=[x for x in range(minimum + 1, maximum)]
+    )
 
 
 def get_line_y_axis(data, height, padding):

@@ -29,7 +29,12 @@ def get_bar_x_axis(sample_data, cols, width, padding):
     x_min = min(data) - 1
     x_max = max(data) + 1
 
-    return scale.axis([x_min, x_max], [padding, width - padding], "Site Number", tics=11)
+    return scale.axis(
+        [x_min, x_max],
+        [padding, width - padding],
+        "Site Number",
+        tic_values=[x for x in range(x_min + 1, x_max)]
+    )
 
 
 def get_bar_y_axis(sample_data, cols, height, padding):

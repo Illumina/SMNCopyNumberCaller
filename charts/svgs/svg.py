@@ -132,12 +132,23 @@ def x_axis_lines(x_axis, y_axis):
     return lines
 
 
+def right_axis_line(x_axis, y_axis):
+    return [
+        line(
+            scale(x_axis["max"], x_axis),
+            y_scale(y_axis["min"], y_axis),
+            scale(x_axis["max"], x_axis),
+            y_scale(y_axis["max"], y_axis)
+        )
+    ]
+
+
 def x_axis_tics(x_axis, y_axis):
     tics = [
         line(
-            scale(x_axis["tics"][0], x_axis),
+            scale(x_axis["min"], x_axis),
             y_scale(y_axis["min"], y_axis),
-            scale(x_axis["tics"][0], x_axis),
+            scale(x_axis["min"], x_axis),
             y_scale(y_axis["max"], y_axis)
         )
     ]
