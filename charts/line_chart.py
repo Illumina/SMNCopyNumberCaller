@@ -42,4 +42,7 @@ def get_line_y_axis(data, height, padding):
         if min_val is None or min_val > sample_min:
             min_val = sample_min
 
-    return scale.axis([math.floor(min_val), math.ceil(max_val)], [padding, height - padding], "Raw SMN CN")
+    if min_val < 0:
+        min_val = 0
+
+    return scale.axis([math.floor(min_val), math.ceil(max_val)], [padding, height - padding], "Raw SMN CN", tics=6)

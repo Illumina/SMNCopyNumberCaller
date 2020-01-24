@@ -60,7 +60,9 @@ def write_pdf(conf, pop_data, sample_data):
 
     for sample in sample_data:
         drawing = Drawing(conf["width"], conf["height"], vAlign="TOP")
-        col_map = util.get_key_map(conf["line_charts"]["columns"], sample_data)
+        col_map = util.get_key_map(conf["line_charts"]["columns"], sample_data[sample])
+        cn = round(sample_data[sample]["Full_length_CN_raw"]) / 2
+        col_map["SMN2_CN_raw"] = [(x[0], (cn - (x[1] - cn))) for x in col_map["SMN1_CN_raw"]]
         chart = line_chart.get_line_chart(col_map, conf, sample, "pdf")
         add_space()
         elements.append(pdf.add_chart_to_page(drawing, chart))
@@ -92,7 +94,9 @@ def write_svg(conf, pop_data, sample_data):
 
     for sample in sample_data:
         conf["index"] = idx
-        col_map = util.get_key_map(conf["line_charts"]["columns"], sample_data)
+        col_map = util.get_key_map(conf["line_charts"]["columns"], sample_data[sample])
+        cn = round(sample_data[sample]["Full_length_CN_raw"]) / 2
+        col_map["SMN2_CN_raw"] = [(x[0], (cn - (x[1] - cn))) for x in col_map["SMN1_CN_raw"]]
         chart = line_chart.get_line_chart(col_map, conf, sample, "svg")
         idx += 1
         page = svg.add_chart_to_page(page, chart)

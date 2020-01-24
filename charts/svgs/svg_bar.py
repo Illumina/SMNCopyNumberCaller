@@ -15,14 +15,10 @@ def get_svg(sample, conf, x_axis, y_axis, norm_y_axis, cols):
     svg_bars += svg.x_axis_text(x_axis, y_axis)
     svg_bars += svg.x_axis_title(x_axis, y_axis)
     svg_bars += svg.y_axis_lines(x_axis, norm_y_axis)
-    svg_bars += svg.y_axis_tics(x_axis, y_axis, "right")
-    svg_bars += svg.y_axis_text(x_axis, y_axis, "right")
-    svg_bars += svg.y_axis_title(x_axis, y_axis, "right")
     svg_bars += svg.y_axis_tics(x_axis, norm_y_axis, "left")
     svg_bars += svg.y_axis_text(x_axis, norm_y_axis, "left")
     svg_bars += svg.y_axis_title(x_axis, norm_y_axis, "left")
-    svg_bars += sample_bars(sample, x_axis, y_axis, cols)
-    svg_bars += sample_lines(sample, x_axis, norm_y_axis, cols)
+    svg_bars += sample_bars(sample, x_axis, norm_y_axis, cols)
     svg_bars += svg.title(title, x_axis)
     svg_bars += svg.get_keys(cols, x_axis, y_axis, element_type="rect")
 
@@ -33,8 +29,9 @@ def get_svg(sample, conf, x_axis, y_axis, norm_y_axis, cols):
 
 
 def sample_bars(sample_data, x_axis, y_axis, cols):
-    smn1 = sample_data[cols[0]]
-    smn2 = sample_data[cols[1]]
+    hap = sample_data["Median_depth"] / 2
+    smn1 = [(x[0], x[1] / hap) for x in sample_data[cols[0]]]
+    smn2 = [(x[0], x[1] / hap) for x in sample_data[cols[1]]]
 
     bars = []
     for x_val, y_val in smn1:
@@ -47,27 +44,9 @@ def sample_bars(sample_data, x_axis, y_axis, cols):
     return bars
 
 
-def sample_lines(sample_data, x_axis, y_axis, cols):
-    hap = sample_data["Median_depth"] / 2
-    smn1 = sample_data[cols[0]]
-    smn2 = sample_data[cols[1]]
-
-    smn1_points = []
-    smn2_points = []
-    for x_val, y_val in smn1:
-        smn1_points.append("%s,%s" % (scale(x_val - 0.2, x_axis), y_scale((y_val / hap), y_axis)))
-    for x_val, y_val in smn2:
-        smn2_points.append("%s,%s" % (scale(x_val + 0.2, x_axis), y_scale((y_val / hap), y_axis)))
-
-    smn1_line = svg.path(smn1_points, color=color_arr[0])
-    smn2_line = svg.path(smn2_points, color=color_arr[1])
-
-    return [smn1_line, smn2_line]
-
-
 def get_bar(i, val, x_axis, y_axis, color):
     width = scale(2, x_axis) - scale(1.6, x_axis)
     y = y_scale(val, y_axis)
     height = y_scale(y_axis["min"], y_axis) - y
     x = scale(i, x_axis)
-    return svg.rect(x, y, width, height, border_color=colors["grey"], fill_color=color, opacity=0.7)
+    return svg.rect(x, y, width, height, border_color=color, fill_color=color, opacity=0.7)

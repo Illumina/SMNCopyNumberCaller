@@ -16,6 +16,7 @@ def get_svg(data, config, x_axis, y_axis, col="SMN1_CN_raw"):
     svg_lines += svg.y_axis_text(x_axis, y_axis, "left")
     svg_lines += svg.y_axis_title(x_axis, y_axis, "left")
     svg_lines += sample_paths(data, x_axis, y_axis)
+
     svg_lines += circles(data, x_axis, y_axis)
     svg_lines += svg.title("%s" % col, x_axis)
     svg_lines += svg.get_keys([key for key in data], x_axis, y_axis, element_type="circle")
@@ -28,9 +29,9 @@ def get_svg(data, config, x_axis, y_axis, col="SMN1_CN_raw"):
 
 def sample_paths(data, x_axis, y_axis):
     paths = []
-    for idx, sample in enumerate(data):
+    for idx, key in enumerate(data):
         points = []
-        for x_idx, value in enumerate(data[sample]):
+        for x_idx, value in enumerate(data[key]):
             points.append("%s,%s" % (scale(value[0], x_axis), y_scale(value[1], y_axis)))
         color = color_arr[idx % len(color_arr)]
         paths.append(svg.path(points, color=color))
