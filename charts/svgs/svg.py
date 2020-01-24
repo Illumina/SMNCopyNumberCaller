@@ -110,7 +110,7 @@ def headers(height=None):
         ("xmlns:xlink", "http://www.w3.org/1999/xlink")
     ])
     if height is not None:
-        svg.add_attr(("style", "height: %s" % height))
+        svg.add_attr(("style", "height: %s; padding-top: 50" % height))
     return svg
 
 
