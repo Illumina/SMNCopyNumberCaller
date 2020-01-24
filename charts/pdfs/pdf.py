@@ -219,7 +219,7 @@ def get_keys(key_items, x_axis, y_axis, element_type="line"):
         color = color_arr[idx % len(color_arr)]
         y_val = y - (15 * (idx + 1))
         keys.append(get_key_symbol(x, y_val, element_type, color))
-        keys.append(String(x + 14, y_val, key, fontName="Helvetica", fontSize=8))
+        keys.append(String(x + 14, y_val, key.split('_')[0], fontName="Helvetica", fontSize=8))
 
     return keys
 
@@ -228,7 +228,7 @@ def get_key_symbol(x, y, element_type, color):
     return {
         "line": Line(x, y + 3, x + 10, y + 3, strokeColor=color, strokeWidth=3),
         "circle": Circle(x + 6, y + 3, 2, fillColor=color, strokeColor=color),
-        "rect": Rect(x + 6, y, 4, 4, fillColor=color),
+        "rect": Rect(x + 6, y, 4, 4, fillColor=color, strokeColor=color),
     }[element_type]
 
 

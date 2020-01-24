@@ -11,8 +11,8 @@ def get_bar_chart(conf, sample_data, fmt):
     cols = conf["bar_charts"]["columns"]
 
     x_axis = get_bar_x_axis(sample_data, cols, width, padding)
-    y_axis = get_bar_y_axis(sample_data, cols, height, padding)
     norm_y_axis = get_normalised_y_axis(sample_data, cols, height, padding)
+    y_axis = get_bar_y_axis(norm_y_axis, sample_data)
 
     if fmt == "svg":
         return svg_bar.get_svg(sample_data, conf, x_axis, y_axis, norm_y_axis, cols)
@@ -37,11 +37,13 @@ def get_bar_x_axis(sample_data, cols, width, padding):
     )
 
 
-def get_bar_y_axis(sample_data, cols, height, padding):
-    data = sample_data[cols[0]] + sample_data[cols[1]]
-    max_val = math.ceil(max([x[1] for x in data]))
+def get_bar_y_axis(norm_y_axis, sample_data):
+    hap = sample_data["Median_depth"] / 2
+    min_val = norm_y_axis["min"] * hap
+    max_val = norm_y_axis["max"] * hap
+    tics = [round(x * hap) for x in norm_y_axis["tics"]]
 
-    return scale.axis([0, max_val], [padding, height - padding], "Read Count", tics=4)
+    return scale.axis([min_val, max_val], norm_y_axis["domain"], "Read Count", tic_values=tics)
 
 
 def get_normalised_y_axis(sample_data, cols, height, padding):
@@ -50,4 +52,4 @@ def get_normalised_y_axis(sample_data, cols, height, padding):
     mapped_data = [(x[1] / hap) for x in all_data]
     max_val = math.ceil(max(mapped_data))
 
-    return scale.axis([0, max_val], [padding, height - padding], "Norm. Depth", tics=4)
+    return scale.axis([0, max_val], [padding, height - padding], "Approx. CN", tics=4)

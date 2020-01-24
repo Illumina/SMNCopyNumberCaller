@@ -304,7 +304,7 @@ def get_keys(key_items, x_axis, y_axis, element_type="line"):
         color = color_arr[idx % len(color_arr)]
         y_val = y + (15 * (idx + 1))
         keys.append(get_key_symbol(x, y_val, element_type, color))
-        keys.append(text(x + 20, y_val, key))
+        keys.append(text(x + 20, y_val, key.split('_')[0]))
 
     return keys
 
@@ -313,7 +313,7 @@ def get_key_symbol(x, y, element_type, color):
     return {
         "line": line(x, y - 6, x + 15, y - 6, color=color, thickness=3),
         "circle": circle(x + 10, y - 4, 4, fill_color=color, border_color=color),
-        "rect": rect(x + 6, y - 8, 8, 8, fill_color=color),
+        "rect": rect(x + 6, y - 8, 8, 8, fill_color=color, border_color=color),
     }[element_type]
 
 

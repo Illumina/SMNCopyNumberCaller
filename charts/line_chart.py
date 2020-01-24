@@ -50,4 +50,4 @@ def get_line_y_axis(data, height, padding):
     if min_val < 0:
         min_val = 0
 
-    return scale.axis([math.floor(min_val), math.ceil(max_val)], [padding, height - padding], "Raw SMN CN", tics=6)
+    return scale.axis([math.floor(min_val), math.ceil(max_val)], [padding, height - padding], "Raw CN", tics=6)
