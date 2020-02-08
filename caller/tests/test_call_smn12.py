@@ -79,7 +79,7 @@ class TestCallSMN12(object):
         assert final_call.SMN1 == 1
         assert final_call.SMN2 == 3
         # SMN* is a no-call
-        assert final_call.SMNstar is None
+        assert final_call.SMN2delta78 is None
         assert final_call.isSMA is False
         assert final_call.isCarrier is True
         assert final_call.Info == 'PASS:Majority'
@@ -93,7 +93,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 1
         assert final_call.SMN2 == 3
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is True
         assert final_call.Info == 'PASS:Majority'
@@ -108,7 +108,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
         assert final_call.SMN2 == '3-4'
-        assert final_call.SMNstar is None
+        assert final_call.SMN2delta78 is None
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
         assert final_call.Info == 'FLCNnoCall'
@@ -121,7 +121,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar is None
+        assert final_call.SMN2delta78 is None
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
         assert final_call.Info == 'FLCNnoCall'
@@ -134,7 +134,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar is None
+        assert final_call.SMN2delta78 is None
         # we can tell this sample is not SMA based on read count at splice site
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
@@ -148,7 +148,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 1
         assert final_call.SMN2 == 3
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is True
         assert final_call.Info == 'PASS:Majority'
@@ -160,7 +160,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
         assert final_call.SMN2 == 3
-        assert final_call.SMNstar == 1
+        assert final_call.SMN2delta78 == 1
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
@@ -172,7 +172,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
         assert final_call.SMN2 == 3
-        assert final_call.SMNstar == 1
+        assert final_call.SMN2delta78 == 1
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
@@ -184,7 +184,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 2
         assert final_call.SMN2 == 2
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
@@ -196,7 +196,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 2
         assert final_call.SMN2 == 2
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:AgreeWithSum'
@@ -210,7 +210,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
         assert final_call.Info == 'SpliceDisagree'
@@ -222,7 +222,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
         assert final_call.Info == 'Ambiguous'
@@ -234,7 +234,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
         assert final_call.Info == 'Ambiguous'
@@ -247,7 +247,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
         assert final_call.SMN2 == 0
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
@@ -260,7 +260,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [42], [16], 30)
         assert final_call.SMN1 == 2
         assert final_call.SMN2 == 2
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
@@ -274,7 +274,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [16], [42], 30)
         assert final_call.SMN1 == 2
         assert final_call.SMN2 == 2
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
@@ -293,7 +293,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
         assert final_call.SMN2 == 3
-        assert final_call.SMNstar == 1
+        assert final_call.SMN2delta78 == 1
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
         assert final_call.Info == 'PASS:Majority'
@@ -306,7 +306,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 1
         assert final_call.SMN2 == 3
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
         assert final_call.Info == 'PASS:Majority'
@@ -319,7 +319,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
         assert final_call.Info == 'Ambiguous'
@@ -333,7 +333,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 is None
         assert final_call.SMN2 is None
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
         assert final_call.Info == 'Ambiguous'
@@ -346,7 +346,7 @@ class TestCallSMN12(object):
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 2
         assert final_call.SMN2 == 2
-        assert final_call.SMNstar == 0
+        assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is None
         assert final_call.isCarrier is False
         assert final_call.Info == 'PASS:Majority'
