@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # SMNCopyNumberCaller
-# Copyright 2019 Illumina, Inc.
+# Copyright 2019-2020 Illumina, Inc.
 # All rights reserved.
 #
 # Author: Xiao Chen <xchen2@illumina.com>
@@ -28,21 +28,20 @@ import pytest
 from ..call_smn12 import update_full_length_cn, get_smn12_call, smn1_cn_zero
 
 SMA_CUTOFF = 1e-6
-cn_call = namedtuple(
-    'cn_call', 'exon16_cn exon16_depth exon78_cn exon78_depth')
+cn_call = namedtuple("cn_call", "exon16_cn exon16_depth exon78_cn exon78_depth")
 
 
 class TestCN(object):
     def test_smn1_cn_zero(self):
         likelihood_ratio = smn1_cn_zero(0, 30, 30)
-        assert likelihood_ratio > 1/SMA_CUTOFF
+        assert likelihood_ratio > 1 / SMA_CUTOFF
         likelihood_ratio = smn1_cn_zero(15, 15, 30)
         assert likelihood_ratio < SMA_CUTOFF
         likelihood_ratio = smn1_cn_zero(2, 32, 30)
-        assert likelihood_ratio < 1/SMA_CUTOFF
+        assert likelihood_ratio < 1 / SMA_CUTOFF
         assert likelihood_ratio > SMA_CUTOFF
         likelihood_ratio = smn1_cn_zero(1, 32, 30)
-        assert likelihood_ratio < 1/SMA_CUTOFF
+        assert likelihood_ratio < 1 / SMA_CUTOFF
         assert likelihood_ratio > SMA_CUTOFF
 
     def test_update_full_length_cn(self):
@@ -82,7 +81,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 is None
         assert final_call.isSMA is False
         assert final_call.isCarrier is True
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     # when p3 is no-call but p3 depth value is larger than p5,
     # take CN(p5) as CN(p3)
@@ -96,7 +95,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is True
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     # ===========================================================================
     # when p3 is no-call, but we can call SMA based on read count
@@ -107,11 +106,11 @@ class TestCallSMN12(object):
         lsnp2 = [0, 0, 0, 0, 0, 0, 0, 45, 45, 45, 45, 45, 45, 45, 45, 45]
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
-        assert final_call.SMN2 == '3-4'
+        assert final_call.SMN2 == "3-4"
         assert final_call.SMN2delta78 is None
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
-        assert final_call.Info == 'FLCNnoCall'
+        assert final_call.Info == "FLCNnoCall"
 
     # when p3 is no-call, #reads ambiguous at splice site => isSMA is no-call
     def test_p3_nocall_issma_nocall(self):
@@ -124,7 +123,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 is None
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
-        assert final_call.Info == 'FLCNnoCall'
+        assert final_call.Info == "FLCNnoCall"
 
     # when p3 is no-call, not SMA
     def test_p3_nocall_not_sma(self):
@@ -138,7 +137,7 @@ class TestCallSMN12(object):
         # we can tell this sample is not SMA based on read count at splice site
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
-        assert final_call.Info == 'FLCNnoCall'
+        assert final_call.Info == "FLCNnoCall"
 
     # ===========================================================================
     def test_carrier(self):
@@ -151,7 +150,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is True
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     def test_sma(self):
         raw_cn_call = cn_call(4, 3.98, 3, 3.1)
@@ -163,7 +162,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 1
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     def test_sma2_noise(self):
         raw_cn_call = cn_call(4, 3.98, 3, 3.1)
@@ -175,7 +174,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 1
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     def test_not_carrier(self):
         raw_cn_call = cn_call(4, 3.98, 4, 4.02)
@@ -187,7 +186,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     def test_not_carrier_majority_rule_agreewithsum(self):
         raw_cn_call = cn_call(4, 3.98, 4, 4.02)
@@ -199,7 +198,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:AgreeWithSum'
+        assert final_call.Info == "PASS:AgreeWithSum"
 
     # check that the sites surrounding splice variant site are consistent with
     # overall call
@@ -213,7 +212,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
-        assert final_call.Info == 'SpliceDisagree'
+        assert final_call.Info == "SpliceDisagree"
 
     def test_smn1_nocall_ambiguous(self):
         raw_cn_call = cn_call(4, 3.98, 4, 4.02)
@@ -225,7 +224,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
-        assert final_call.Info == 'Ambiguous'
+        assert final_call.Info == "Ambiguous"
 
     def test_smn1_nocall_ambiguous_isSMA_false(self):
         raw_cn_call = cn_call(4, 3.98, 4, 4.02)
@@ -237,20 +236,20 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
-        assert final_call.Info == 'Ambiguous'
+        assert final_call.Info == "Ambiguous"
 
     # ===========================================================================
     def test_0smn1_0smn2(self):
         raw_cn_call = cn_call(0, 0, 0, 0)
-        lsnp1 = [0]*16
-        lsnp2 = [0]*16
+        lsnp1 = [0] * 16
+        lsnp2 = [0] * 16
         final_call = get_smn12_call(raw_cn_call, lsnp1, lsnp2, [60], [0], 30)
         assert final_call.SMN1 == 0
         assert final_call.SMN2 == 0
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is True
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     # ===========================================================================
     def test_target_variant(self):
@@ -263,8 +262,8 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
-        assert final_call.g27134TG_raw == round(4*16/(42+16), 2)
+        assert final_call.Info == "PASS:Majority"
+        assert final_call.g27134TG_raw == round(4 * 16 / (42 + 16), 2)
         assert final_call.g27134TG_CN == 1
 
     def test_target_variant_larger_than_smn1cn(self):
@@ -277,8 +276,8 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
-        assert final_call.g27134TG_raw == round(4*42/(42+16), 2)
+        assert final_call.Info == "PASS:Majority"
+        assert final_call.g27134TG_raw == round(4 * 42 / (42 + 16), 2)
         # called 3, update to be equal to SMN1 CN
         assert final_call.g27134TG_CN == 2
 
@@ -296,7 +295,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 1
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     # all sites look like 1 and splice site looks like 0
     def test_corner2(self):
@@ -309,7 +308,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"
 
     # a mixture of 0s and 1s so isSMA is no-call
     def test_corner3(self):
@@ -322,7 +321,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is None
         assert final_call.isCarrier is None
-        assert final_call.Info == 'Ambiguous'
+        assert final_call.Info == "Ambiguous"
 
     # a mixture of 0s and 1s, but enough reads at splice site to say isSMA is
     # false
@@ -336,7 +335,7 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is False
         assert final_call.isCarrier is None
-        assert final_call.Info == 'Ambiguous'
+        assert final_call.Info == "Ambiguous"
 
     # all sites look like 2 and splice site looks like 0
     def test_corner5(self):
@@ -349,4 +348,4 @@ class TestCallSMN12(object):
         assert final_call.SMN2delta78 == 0
         assert final_call.isSMA is None
         assert final_call.isCarrier is False
-        assert final_call.Info == 'PASS:Majority'
+        assert final_call.Info == "PASS:Majority"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # SMNCopyNumberCaller
-# Copyright 2019 Illumina, Inc.
+# Copyright 2019-2020 Illumina, Inc.
 # All rights reserved.
 #
 # Author: Xiao Chen <xchen2@illumina.com>
@@ -29,16 +29,16 @@ import numpy as np
 from ..gmm import Gmm
 from ..utilities import parse_gmm_file
 
-test_data_dir = os.path.join(os.path.dirname(__file__), 'test_data')
+test_data_dir = os.path.join(os.path.dirname(__file__), "test_data")
 
 
 class TestGMM(object):
     def test_gmm_parameter(self):
-        gmm_file = os.path.join(test_data_dir, 'SMN_gmm.txt')
+        gmm_file = os.path.join(test_data_dir, "SMN_gmm.txt")
         dpar_tmp = parse_gmm_file(gmm_file)
 
         test_gmm = Gmm()
-        test_gmm.set_gmm_par(dpar_tmp, 'exon1-6')
+        test_gmm.set_gmm_par(dpar_tmp, "exon1-6")
         assert test_gmm.value_shift == 0.994
         assert len(test_gmm.mu_state) == 11
         assert len(test_gmm.prior_state) == 11
@@ -51,13 +51,17 @@ class TestGMM(object):
         assert round(test_gmm.prior_state[0], 4) == 0.001
         assert round(test_gmm.prior_state[8], 4) == 0.0003
         assert test_gmm.sigma_state[0:4] == [
-            0.032, 0.051/np.sqrt(2), 0.051, 0.051*np.sqrt(1.5)]
+            0.032,
+            0.051 / np.sqrt(2),
+            0.051,
+            0.051 * np.sqrt(1.5),
+        ]
 
     def test_gmmcall(self):
-        gmm_file = os.path.join(test_data_dir, 'SMN_gmm.txt')
+        gmm_file = os.path.join(test_data_dir, "SMN_gmm.txt")
         dpar_tmp = parse_gmm_file(gmm_file)
         test_gmm = Gmm()
-        test_gmm.set_gmm_par(dpar_tmp, 'exon1-6')
+        test_gmm.set_gmm_par(dpar_tmp, "exon1-6")
         cncall = test_gmm.gmm_call(2.1)
         assert cncall[0] == 2
         cncall = test_gmm.gmm_call(6.48)
@@ -67,7 +71,7 @@ class TestGMM(object):
         assert cncall[0] is None
 
         test_gmm = Gmm()
-        test_gmm.set_gmm_par(dpar_tmp, 'exon7-8')
+        test_gmm.set_gmm_par(dpar_tmp, "exon7-8")
         cncall = test_gmm.gmm_call(0.18)
         assert cncall[0] == 0
         cncall = test_gmm.gmm_call(0.95)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # SMNCopyNumberCaller
-# Copyright 2019 Illumina, Inc.
+# Copyright 2019-2020 Illumina, Inc.
 # All rights reserved.
 #
 # Author: Xiao Chen <xchen2@illumina.com>
@@ -40,9 +40,9 @@ def call_reg1_cn(full_cn, count_reg1, count_reg2, min_read=0):
     if nsum == 0:
         return [None]
     for i in range(full_cn + 1):
-        depthexpected = float(nsum) * float(i)/float(full_cn)
+        depthexpected = float(nsum) * float(i) / float(full_cn)
         if i == 0:
-            depthexpected = (ERROR_RATE/3) * float(nsum)
+            depthexpected = (ERROR_RATE / 3) * float(nsum)
         if i == full_cn:
             depthexpected = float(nsum) - ERROR_RATE * float(nsum)
         if count_reg1 <= count_reg2:
@@ -53,19 +53,24 @@ def call_reg1_cn(full_cn, count_reg1, count_reg2, min_read=0):
     sum_prob = sum(prob)
     if sum_prob == 0:
         return [None]
-    post_prob = [float(a)/float(sum_prob) for a in prob]
+    post_prob = [float(a) / float(sum_prob) for a in prob]
     if count_reg2 < count_reg1:
         post_prob = post_prob[::-1]
     post_prob_sorted = sorted(post_prob, reverse=True)
-    if post_prob.index(post_prob_sorted[0]) != 0 and \
-            count_reg1 <= min_read and count_reg2 >= min_read:
+    if (
+        post_prob.index(post_prob_sorted[0]) != 0
+        and count_reg1 <= min_read
+        and count_reg2 >= min_read
+    ):
         return [0]
     if post_prob_sorted[0] >= POSTERIOR_CUTOFF_STRINGENT:
         return [post_prob.index(post_prob_sorted[0])]
     # output the two most likely scenarios
     cn_prob_filtered = [
-        post_prob.index(post_prob_sorted[0]), round(post_prob_sorted[0], 3),
-        post_prob.index(post_prob_sorted[1]), round(post_prob_sorted[1], 3)
+        post_prob.index(post_prob_sorted[0]),
+        round(post_prob_sorted[0], 3),
+        post_prob.index(post_prob_sorted[1]),
+        round(post_prob_sorted[1], 3),
     ]
     return cn_prob_filtered
 
@@ -88,8 +93,9 @@ def process_raw_call_gc(cn_prob, post_cutoff, keep_none=True):
     return cn_prob_filtered
 
 
-def process_raw_call_denovo(cn_prob, post_cutoff1, post_cutoff2,
-                            list_total_cn=None, keep_none=True):
+def process_raw_call_denovo(
+    cn_prob, post_cutoff1, post_cutoff2, list_total_cn=None, keep_none=True
+):
     """
     Filter raw CN calls based on posterior probablity cutoff.
     For de novel variant calling, i.e. non-gene-conversion cases.
@@ -108,12 +114,11 @@ def process_raw_call_denovo(cn_prob, post_cutoff1, post_cutoff2,
         else:
             if list_total_cn is not None:
                 total_cn = list_total_cn[i]
-                keep_var = (
-                    (cn_call[0] > 0 and cn_call[2] > 0) or
-                    (cn_call[0] == total_cn or cn_call[2] == total_cn)
+                keep_var = (cn_call[0] > 0 and cn_call[2] > 0) or (
+                    cn_call[0] == total_cn or cn_call[2] == total_cn
                 )
             else:
-                keep_var = (cn_call[0] > 0 and cn_call[2] > 0)
+                keep_var = cn_call[0] > 0 and cn_call[2] > 0
             if cn_call[1] > post_cutoff1:
                 cn_prob_filtered.append(cn_call[0])
             elif keep_var:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # SMNCopyNumberCaller
-# Copyright 2019 Illumina, Inc.
+# Copyright 2019-2020 Illumina, Inc.
 # All rights reserved.
 #
 # Author: Xiao Chen <xchen2@illumina.com>
@@ -24,8 +24,11 @@ import sys
 import os
 import pytest
 
-from ..copy_number_call import call_reg1_cn, process_raw_call_gc, \
-    process_raw_call_denovo
+from ..copy_number_call import (
+    call_reg1_cn,
+    process_raw_call_gc,
+    process_raw_call_denovo,
+)
 
 
 class TestCallCN(object):
@@ -40,10 +43,7 @@ class TestCallCN(object):
         assert call == [2, 0.689, 1, 0.311]
 
     def test_process_raw_call_gc(self):
-        lcn = [
-            [1],
-            [1, 0.8, 2, 0.2]
-        ]
+        lcn = [[1], [1, 0.8, 2, 0.2]]
         filtered_call = process_raw_call_gc(lcn, 0.7)
         assert filtered_call == [1, 1]
         filtered_call = process_raw_call_gc(lcn, 0.9)
@@ -52,21 +52,13 @@ class TestCallCN(object):
         assert filtered_call == [1]
 
     def test_process_raw_call_denovo(self):
-        lcn = [
-            [1],
-            [0, 0.8, 1, 0.2],
-            [2, 0.6, 1, 0.4],
-        ]
+        lcn = [[1], [0, 0.8, 1, 0.2], [2, 0.6, 1, 0.4]]
         filtered_call = process_raw_call_denovo(lcn, 0.9, 0.7)
         assert filtered_call == [1, None, 1]
         filtered_call = process_raw_call_denovo(lcn, 0.9, 0.55)
         assert filtered_call == [1, None, 2]
 
-        lcn = [
-            [1],
-            [1, 0.65, 0, 0.35],
-            [2, 0.6, 1, 0.4],
-        ]
+        lcn = [[1], [1, 0.65, 0, 0.35], [2, 0.6, 1, 0.4]]
         filtered_call = process_raw_call_denovo(lcn, 0.9, 0.62, [1, 1, 1])
         assert filtered_call == [1, 1, 1]
         filtered_call = process_raw_call_denovo(lcn, 0.9, 0.7, [1, 1, 1])

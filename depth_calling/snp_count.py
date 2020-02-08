@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # SMNCopyNumberCaller
-# Copyright 2019 Illumina, Inc.
+# Copyright 2019-2020 Illumina, Inc.
 # All rights reserved.
 #
 # Author: Xiao Chen <xchen2@illumina.com>
@@ -25,19 +25,19 @@ import pysam
 from .utilities import open_alignment_file
 
 
-COMPLEMENT = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', 'N': 'N'}
+COMPLEMENT = {"A": "T", "T": "A", "C": "G", "G": "C", "N": "N"}
 SITES_STRINGENT = []  # consider being more stringent for exon8 site for SMN
 
 
 def reverse_complement(sequence):
     """Return the reverse complement of a sequence."""
-    return ''.join(COMPLEMENT[b] for b in sequence[::-1])
+    return "".join(COMPLEMENT[b] for b in sequence[::-1])
 
 
 def get_nm(ltag):
     """Return the value of the NM tag."""
     for tag in ltag:
-        if tag[0] == 'NM':
+        if tag[0] == "NM":
             return tag[1]
     return None
 
@@ -51,41 +51,40 @@ def get_snp_position(pos_file):
     with open(pos_file) as read_pos:
         counter = -1
         for line in read_pos:
-            if line[0] != '#' and line[0] != '\n':
+            if line[0] != "#" and line[0] != "\n":
                 counter += 1
                 split_line = line.strip().split()
-                reg1_name = split_line[1] + '_' + str(counter)
-                reg2_name = split_line[3] + '_' + str(counter)
+                reg1_name = split_line[1] + "_" + str(counter)
+                reg2_name = split_line[3] + "_" + str(counter)
                 reg1_base = split_line[2].upper()
                 reg2_base = split_line[4].upper()
-                if split_line[-1] != '-':
-                    dsnp1.setdefault(reg1_name, '_'.join(
-                        [reg1_base, reg2_base]))
-                    dsnp2.setdefault(reg2_name, '_'.join(
-                        [reg1_base, reg2_base]))
+                if split_line[-1] != "-":
+                    dsnp1.setdefault(reg1_name, "_".join([reg1_base, reg2_base]))
+                    dsnp2.setdefault(reg2_name, "_".join([reg1_base, reg2_base]))
                 else:
                     dsnp1.setdefault(
-                        reg1_name,
-                        '_'.join([reg1_base, reverse_complement(reg2_base)])
+                        reg1_name, "_".join([reg1_base, reverse_complement(reg2_base)])
                     )
                     dsnp2.setdefault(
-                        reg2_name,
-                        '_'.join([reverse_complement(reg1_base), reg2_base])
+                        reg2_name, "_".join([reverse_complement(reg1_base), reg2_base])
                     )
                 dindex.setdefault(reg1_name, counter)
                 dindex.setdefault(reg2_name, counter)
     nchr = split_line[0]
-    snp_lookup = namedtuple('snp_lookup', 'dsnp1 dsnp2 nchr dindex')
+    snp_lookup = namedtuple("snp_lookup", "dsnp1 dsnp2 nchr dindex")
     dbsnp = snp_lookup(dsnp1, dsnp2, nchr, dindex)
     return dbsnp
 
 
 def passing_read(pileupread):
     """Return whether a read passes filter."""
-    return (not pileupread.is_del and not pileupread.is_refskip and
-            pileupread.alignment.is_secondary == 0 and
-            pileupread.alignment.is_supplementary == 0 and
-            pileupread.alignment.is_duplicate == 0)
+    return (
+        not pileupread.is_del
+        and not pileupread.is_refskip
+        and pileupread.alignment.is_secondary == 0
+        and pileupread.alignment.is_supplementary == 0
+        and pileupread.alignment.is_duplicate == 0
+    )
 
 
 def passing_read_stringent(pileupread):
@@ -93,9 +92,11 @@ def passing_read_stringent(pileupread):
     number_mismatch = get_nm(pileupread.alignment.tags)
     align_len = pileupread.alignment.query_alignment_length
     read_len = len(pileupread.alignment.query_sequence)
-    return (number_mismatch <= float(align_len) * 0.08 and
-            pileupread.query_position > 0 and
-            pileupread.query_position < read_len - 1)
+    return (
+        number_mismatch <= float(align_len) * 0.08
+        and pileupread.query_position > 0
+        and pileupread.query_position < read_len - 1
+    )
 
 
 def get_reads_by_region(bamfile_handle, nchr, dsnp, dindex, min_mapq=0):
@@ -105,23 +106,32 @@ def get_reads_by_region(bamfile_handle, nchr, dsnp, dindex, min_mapq=0):
     lsnp1 = [0] * len(dsnp)
     lsnp2 = [0] * len(dsnp)
     for snp_position_ori in dsnp:
-        snp_position = int(snp_position_ori.split('_')[0])
+        snp_position = int(snp_position_ori.split("_")[0])
         for pileupcolumn in bamfile_handle.pileup(
-                nchr, snp_position - 1, snp_position + 1, truncate=True,
-                stepper='nofilter', ignore_overlaps=False, ignore_orphan=False
+            nchr,
+            snp_position - 1,
+            snp_position + 1,
+            truncate=True,
+            stepper="nofilter",
+            ignore_overlaps=False,
+            ignore_orphan=False,
         ):
             site_position = pileupcolumn.pos + 1
             if site_position == snp_position:
-                reg1_allele, reg2_allele = dsnp[snp_position_ori].split('_')
+                reg1_allele, reg2_allele = dsnp[snp_position_ori].split("_")
                 for read in pileupcolumn.pileups:
-                    if passing_read(read) and \
-                            read.alignment.mapping_quality >= min_mapq:
+                    if (
+                        passing_read(read)
+                        and read.alignment.mapping_quality >= min_mapq
+                    ):
                         dsnp_index = dindex[snp_position_ori]
                         read_seq = read.alignment.query_sequence
-                        if (site_position not in SITES_STRINGENT or
-                                passing_read_stringent(read)):
-                            reg1_allele_split = reg1_allele.split(',')
-                            reg2_allele_split = reg2_allele.split(',')
+                        if (
+                            site_position not in SITES_STRINGENT
+                            or passing_read_stringent(read)
+                        ):
+                            reg1_allele_split = reg1_allele.split(",")
+                            reg2_allele_split = reg2_allele.split(",")
                             start_pos = read.query_position
                             for allele in reg1_allele_split:
                                 end_pos = start_pos + len(allele)
@@ -142,7 +152,7 @@ def get_fraction(lsnp1, lsnp2):
         if sumdepth == 0:
             reg1_fraction.append(0)
         else:
-            reg1_fraction.append(float(lsnp1[index])/float(sumdepth))
+            reg1_fraction.append(float(lsnp1[index]) / float(sumdepth))
     return reg1_fraction
 
 
@@ -155,10 +165,8 @@ def get_supporting_reads(bamf, dsnp1, dsnp2, nchr, dindex, reference=None):
     assert len(dsnp1) == len(dsnp2)
     # Go through SNP sites in both regions,
     # and count the number of reads supporting each gene.
-    lsnp1_reg1, lsnp2_reg1 = get_reads_by_region(
-        bamfile_handle, nchr, dsnp1, dindex)
-    lsnp1_reg2, lsnp2_reg2 = get_reads_by_region(
-        bamfile_handle, nchr, dsnp2, dindex)
+    lsnp1_reg1, lsnp2_reg1 = get_reads_by_region(bamfile_handle, nchr, dsnp1, dindex)
+    lsnp1_reg2, lsnp2_reg2 = get_reads_by_region(bamfile_handle, nchr, dsnp2, dindex)
     lsnp1 = [sum(x) for x in zip(lsnp1_reg1, lsnp1_reg2)]
     lsnp2 = [sum(x) for x in zip(lsnp2_reg1, lsnp2_reg2)]
     bamfile_handle.close()
