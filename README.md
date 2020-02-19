@@ -1,6 +1,8 @@
 # SMNCopyNumberCaller
 
-SMNCopyNumberCaller is a tool to call the copy number of full-length SMN1, full-length SMN2, as well as SMN2Δ7–8 (SMN2 with a deletion of Exon7-8) from a whole-genome sequencing (WGS) BAM file. This caller works with standard WGS sequencing depth (>=30X), and is insensitive to various aligners (BWA and Isaac have been tested and no difference was observed). Please refer to our [medRxiv link](https://www.medrxiv.org/content/10.1101/19006635v2) for details about the method.   
+SMNCopyNumberCaller is a tool to call the copy number of full-length SMN1, full-length SMN2, as well as SMN2Δ7–8 (SMN2 with a deletion of Exon7-8) from a whole-genome sequencing (WGS) BAM file. This caller works with standard WGS sequencing depth (>=30X), and is insensitive to various aligners (BWA and Isaac have been tested and no difference was observed). Please refer to our [paper](https://www.nature.com/articles/s41436-020-0754-0) for details about the method.   
+
+Chen X, Sanchis-Juan A, French CE, et al. Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genet Med. February 2020:1-9. doi:10.1038/s41436-020-0754-0
 
 SMNCopyNumberCaller is provided under the terms and conditions of the [Apache License Version 2.0](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/LICENSE.txt). It requires several third party packages (numpy, scipy, statsmodels and pysam) provided under other open source licenses, which are listed in [COPYRIGHT.txt](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/COPYRIGHT.txt).  
 
