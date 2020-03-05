@@ -9,13 +9,14 @@ SMNCopyNumberCaller is provided under the terms and conditions of the [Apache Li
 ## Running the program
 This Python3 program can be run as follows:
 ```bash
-./smn_caller.py --manifest MANIFEST_FILE \
-                --genome [19/37/38] \
-                --prefix OUTPUT_FILE_PREFIX \
-                --outDir OUTPUT_DIRECTORY \
-                --threads NUMBER_THREADS
+smn_caller.py --manifest MANIFEST_FILE \
+              --genome [19/37/38] \
+              --prefix OUTPUT_FILE_PREFIX \
+              --outDir OUTPUT_DIRECTORY \
+              --threads NUMBER_THREADS
 ```
-Each line in the manifest file should list the absolute path to an input bam file.    
+Each line in the manifest file should list the absolute path to an input BAM/CRAM file.
+For CRAM input, it’s suggested to provide the path to the reference fasta file with --reference in the command. 
 
 ## Interpreting the output
 The program produces a .tsv file in the directory specified by --outDir.   
