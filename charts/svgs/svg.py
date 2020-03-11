@@ -1,5 +1,3 @@
-import math
-
 from charts.colors import color_arr
 from charts.scale import scale, y_scale
 
@@ -96,8 +94,8 @@ def path(points, color="black", thickness=1, dashes=0, opacity=1.0):
 
 def add_star_to_13(x_axis, y_axis):
     x = scale(13, x_axis) - 10
-    y = y_scale(y_axis["min"], y_axis) + 20
-    return [text(x, y, "*", style="font: 16px sans-serif")]
+    y = y_scale(y_axis["min"], y_axis) + 22
+    return [text(x, y, "*", style="font: 18px sans-serif")]
 
 
 def add_tooltip(element, txt):

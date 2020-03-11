@@ -40,6 +40,9 @@ def main(conf):
 
 if __name__ == "__main__":
     config = {
+        "set_width": 800,
+        "set_height": 200,
+        "set_padding": 40,
         "width": 800,
         "height": 200,
         "padding": 40,

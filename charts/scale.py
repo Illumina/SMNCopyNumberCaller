@@ -12,10 +12,10 @@ def _scale(val, axes):
 
 
 def pdf_scale(conf):
-    ratio = letter_points[1] / (conf["width"] + 600)
-    conf["height"] = ratio * conf["height"]
-    conf["width"] = ratio * conf["width"]
-    conf["padding"] = ratio * conf["padding"]
+    ratio = letter_points[1] / (conf["set_width"] + 600)
+    conf["height"] = ratio * conf["set_height"]
+    conf["width"] = ratio * conf["set_width"]
+    conf["padding"] = ratio * conf["set_padding"]
     return conf
 
 
