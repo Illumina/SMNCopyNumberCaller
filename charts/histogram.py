@@ -2,6 +2,7 @@ import math
 import charts.svgs.svg_histogram as svg_histo
 import charts.pdfs.pdf_histogram as pdf_histo
 import charts.scale as scale
+import charts.data_utils as util
 
 
 class ConfigException(Exception):
@@ -24,15 +25,6 @@ def get_histogram(pop_data, sample_data, config, col, fmt):
         return svg_histo.get_svg(pop_data, sample_data, config, x_axis, y_axis, col=col, header=header[col])
     elif fmt == "pdf":
         return pdf_histo.get_pdf(pop_data, sample_data, x_axis, y_axis, col=col, header=header[col])
-
-
-def add_to_map(data_map, key):
-    if key in data_map:
-        data_map[key] += 1
-    elif key not in data_map:
-        data_map[key] = 1
-
-    return data_map
 
 
 def get_x_axis(pop_data, width, padding):

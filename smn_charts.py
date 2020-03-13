@@ -9,7 +9,7 @@ def get_args():
     parser.add_argument('-p', '--pop-data',
                         dest="pop_data",
                         help='smn_caller.py output: Population tsv file',
-                        required=True)
+                        required=False)
 
     parser.add_argument('-s', '--sample-data',
                         dest="sample_data",
@@ -20,6 +20,12 @@ def get_args():
                         dest="out_dir",
                         help='Output directory',
                         required=True)
+
+    parser.add_argument('-v', '--svg',
+                        dest="svg",
+                        action='store_true',
+                        help='Draw to svg instead of pdf',
+                        required=False)
 
     args = parser.parse_args()
     return args
@@ -34,8 +40,10 @@ def main(conf):
     pop_data = util.read_pop_data(conf["pop_file"])
     sample_data = util.read_sample_data(conf["sample_file"])
 
-    write_svg(conf, pop_data, sample_data)
-    write_pdf(conf, pop_data, sample_data)
+    if args.svg:
+        write_svg(conf, pop_data, sample_data)
+    else:
+        write_pdf(conf, pop_data, sample_data)
 
 
 if __name__ == "__main__":
@@ -46,8 +54,8 @@ if __name__ == "__main__":
         "width": 800,
         "height": 200,
         "padding": 40,
-        "pop_file": "/Users/awarren/Documents/Illumina/XiaoSMN/SMN_1kGP_results.tsv",
-        "sample_file": "/Users/awarren/Documents/Illumina/XiaoSMN/SMN.json",
+        "pop_file": "./charts/data/SMN_1kGP_results.tsv",
+        "sample_file": "./charts/data/example_smn.json",
         "histograms": {
             "columns": ["Total_CN_raw", "Full_length_CN_raw"]
         },
