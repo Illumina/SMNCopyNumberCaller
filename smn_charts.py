@@ -36,7 +36,8 @@ def get_args():
 
 def main(conf):
     args = get_args()
-    conf["pop_file"] = args.pop_data
+    if args.pop_data is not None:
+        conf["pop_file"] = args.pop_data
     conf["sample_file"] = args.sample_data
     conf["output_dir"] = args.out_dir
 
