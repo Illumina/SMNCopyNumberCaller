@@ -1,6 +1,9 @@
 import argparse
 import charts.data_utils as util
+import os
 from charts.draw import write_svg, write_pdf
+
+script_dir = os.path.abspath(os.path.dirname(__file__))
 
 
 def get_args():
@@ -54,8 +57,8 @@ if __name__ == "__main__":
         "width": 800,
         "height": 200,
         "padding": 40,
-        "pop_file": "./charts/data/SMN_1kGP_results.tsv",
-        "sample_file": "./charts/data/example_smn.json",
+        "pop_file": os.path.join(script_dir, "charts/data/SMN_1kGP_results.tsv"),
+        "sample_file": os.path.join(script_dir, "charts/data/example_smn.json"),
         "histograms": {
             "columns": ["Total_CN_raw", "Full_length_CN_raw"]
         },
@@ -65,6 +68,6 @@ if __name__ == "__main__":
         "bar_charts": {
             "columns": ["SMN1_read_support", "SMN2_read_support"]
         },
-        "output_dir": "/Users/awarren/Desktop/"
+        "output_dir": script_dir
     }
     main(config)
