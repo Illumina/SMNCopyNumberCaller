@@ -49,4 +49,12 @@ A .json file is also produced that contains more information for debugging purpo
 | g27134TG_raw      | Raw CN value of g.27134T>G                                     |
 | Info              | Filter value for SMN1 CN call                                  |
 | Confidence        | Confidence of SMN1 CN calls at SNP sites                       |
+  
+## Visualizing the results
+A visualization tool for the SMNCopyNumberCaller result takes the .json file produced by SMNCopyNumberCaller and can be run as follows:
+```bash
+smn_charts.py -s SMN_JSON_FILE \
+              -o OUTPUT_DIRECTORY
+```
+A .pdf file is produced for each sample in OUTPUT_DIRECTORY, containing four plots. The first two plots show where the raw depth values (vertical lines) stand against the population samples for the total SMN CN and the full length SMN CN. The third plot shows the raw CN values for SMN1 and SMN2 at 8 sites that we use to determine the consensus. #13 is the splice variant site. The last plot shows the raw read counts for SMN1 and SMN2 on the right y axis and the left y axis is a rough calculation of CN: #reads divided by the median haploid depth.    
 
