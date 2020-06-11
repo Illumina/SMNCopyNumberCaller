@@ -14,8 +14,8 @@ def get_histogram(pop_data, sample_data, config, col, fmt):
     height = config["height"]
     padding = config["padding"]
     header = {
-        "Total_CN_raw": "SMN1 Exons 1-6",
-        "Full_length_CN_raw": "SMN1 Exons 7-8"
+        "Total_CN_raw": "SMN1+SMN2 Exons 1-6",
+        "Full_length_CN_raw": "SMN1+SMN2 Exons 7-8"
     }
 
     x_axis = get_x_axis(pop_data, width, padding)
