@@ -303,7 +303,6 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
         #print(cn)
         new_call = get_called_variants(var_name, cn)
         print(new_call)
-        
         #
         var_cn_confident = None
         raw_var_cn = None
