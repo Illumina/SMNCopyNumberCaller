@@ -92,6 +92,7 @@ def smn_cn_caller(
     gmm_parameter,
     snp_db,
     variant_db,
+    var_name, #add variant name
     threads,
     count_file=None,
     reference_fasta=None,
@@ -153,6 +154,7 @@ def smn_cn_caller(
         var_ref_count,
         var_alt_count,
         normalized_depth.mediandepth,
+        var_name,
     )
 
     # 5. Prepare final call set
@@ -193,6 +195,7 @@ def write_to_tsv(final_output, out_tsv):
         "Full_length_CN_raw",
         "g.27134T>G_CN",
         "SMN1_CN_raw",
+        "variants_called",
     ]
     with open(out_tsv, "w") as tsv_output:
         tsv_output.write("\t".join(header) + "\n")
@@ -209,6 +212,7 @@ def write_to_tsv(final_output, out_tsv):
                 final_call["Full_length_CN_raw"],
                 final_call["g27134TG_CN"],
                 ",".join([str(a) for a in final_call["SMN1_CN_raw"]]),
+                final_call["variants_called"] 
             ]
             tsv_output.write("\t".join([str(a) for a in output_per_sample]) + "\n")
 
@@ -226,9 +230,16 @@ def main():
 
     datadir = os.path.join(os.path.dirname(__file__), "data")
     # Region file to use
+    var_name = []
     region_file = os.path.join(datadir, "SMN_region_%s.bed" % genome)
     snp_file = os.path.join(datadir, "SMN_SNP_%s.txt" % genome)
     variant_file = os.path.join(datadir, "SMN_target_variant_%s.txt" % genome)
+    #Open variant files
+    with open(variant_file, 'r') as j:
+        for line in j:
+            variants = line.split()
+            annotation = variants[5]
+            var_name.append(annotation)
     gmm_file = os.path.join(datadir, "SMN_gmm.txt")
 
     for required_file in [region_file, snp_file, variant_file, gmm_file]:
@@ -270,6 +281,7 @@ def main():
                     gmm_parameter,
                     snp_db,
                     variant_db,
+                    var_name,
                     threads,
                     count_file,
                     reference_fasta,

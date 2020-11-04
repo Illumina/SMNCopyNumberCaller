@@ -28,12 +28,15 @@ from collections import namedtuple, Counter
 from scipy.stats import poisson
 
 dir_name = os.path.join(os.path.dirname(os.path.dirname(__file__)), "depth_calling")
-if os.path.exists(dir_name):
-    sys.path.append(dir_name)
+
 from depth_calling.copy_number_call import (
     call_reg1_cn,
     process_raw_call_gc,
     process_raw_call_denovo,
+)
+from caller.call_variants import (
+    call_cn_var_homo,
+    get_called_variants,
 )
 
 SMA_CUTOFF = 1e-6
@@ -203,13 +206,13 @@ def get_carrier_status(site_calls, cn_prob, cn_smn1, sma_likelihood_ratio):
     return None
 
 
-def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
+def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name):
     """Return the copy nubmer call of SMN1, SMN2 and SMNstar."""
     smn1_fraction = get_fraction(lsnp1, lsnp2)
     smn_call = namedtuple(
         "smn_call",
         "SMN1 SMN2 SMN2delta78 isCarrier isSMA \
-        SMN1_CN_raw Info Confidence g27134TG_raw g27134TG_CN",
+        SMN1_CN_raw Info Confidence g27134TG_raw g27134TG_CN variants_called",
     )
     raw_cn_call = update_full_length_cn(raw_cn_call)
     full_length_cn = raw_cn_call.exon78_cn
@@ -292,10 +295,21 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
         )
 
         # targeted variant(s)
+        #Adding from -add_pathogenic_variants
+        #The lines for printing can be deleted here
+
+        print(var_alt, var_ref)
+        cn = call_cn_var_homo(full_length_cn, var_alt, var_ref)
+        #print(cn)
+        new_call = get_called_variants(var_name, cn)
+        print(new_call)
+        
+        #
+        # Chaning from 0 to 5
         var_cn_confident = None
         raw_var_cn = None
         var_fraction = get_fraction(var_alt, var_ref)
-        raw_var_cn = get_raw_smn1_cn(full_length_cn, var_fraction)[0]
+        raw_var_cn = get_raw_smn1_cn(full_length_cn, var_fraction)[0] 
         var_cn = [call_reg1_cn(full_length_cn, var_alt[0], var_ref[0])]
         var_cn_filtered = process_raw_call_denovo(
             var_cn, POSTERIOR_CUTOFF_MEDIUM, POSTERIOR_CUTOFF_LOOSE, keep_none=False
@@ -330,6 +344,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
             cn_prob,
             raw_var_cn,
             var_cn_confident,
+            new_call,
         )
 
     return dout
