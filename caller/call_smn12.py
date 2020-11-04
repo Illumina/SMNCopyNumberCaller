@@ -305,7 +305,6 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
         print(new_call)
         
         #
-        # Chaning from 0 to 5
         var_cn_confident = None
         raw_var_cn = None
         var_fraction = get_fraction(var_alt, var_ref)
