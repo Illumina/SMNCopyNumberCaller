@@ -198,7 +198,9 @@ def write_to_tsv(final_output, out_tsv):
         "variants_called",
     ]
     with open(out_tsv, "w") as tsv_output:
-        tsv_output.write("\t".join(header) + "\n")
+        f = open(out_tsv,'r')
+        lines = f.readlines()[1:]
+        f.close()
         for sample_id in final_output:
             final_call = final_output[sample_id]
             output_per_sample = [
