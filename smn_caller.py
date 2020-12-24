@@ -198,9 +198,7 @@ def write_to_tsv(final_output, out_tsv):
         "variants_called",
     ]
     with open(out_tsv, "w") as tsv_output:
-        f = open(out_tsv,'r')
-        lines = f.readlines()[1:]
-        f.close()
+        tsv_output.write("\t".join(header) + "\n")
         for sample_id in final_output:
             final_call = final_output[sample_id]
             output_per_sample = [
@@ -237,13 +235,14 @@ def main():
     snp_file = os.path.join(datadir, "SMN_SNP_%s.txt" % genome)
     variant_file = os.path.join(datadir, "SMN_target_variant_%s.txt" % genome)
     #Open variant files
-    with open(variant_file, 'r') as j:
-        for line in j:
-            variants = line.split()
-            annotation = variants[5]
-            var_name.append(annotation)
-    gmm_file = os.path.join(datadir, "SMN_gmm.txt")
 
+    with open(variant_file, 'r') as work:
+        for line in work:
+            if not line.startswith("#"):
+                variants = line.split()
+                annotation = variants[5]
+                var_name.append(annotation)
+    gmm_file = os.path.join(datadir, "SMN_gmm.txt")
     for required_file in [region_file, snp_file, variant_file, gmm_file]:
         if os.path.exists(required_file) == 0:
             raise Exception("File %s not found." % required_file)
