@@ -1,3 +1,4 @@
+#chr    pos_SMN1    base_REF   pos_SMN2    base_ALT   annotation
 chr5	70247901	T	69372481	G	g.27134T>G 
 chr5	70220935	C	69345517	G	c.5C>G
 chr5	70220973	C	69345555	T	c.43C>T 

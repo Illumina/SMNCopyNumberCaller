@@ -242,6 +242,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
                 [None] * TOTAL_NUM_SITES,
                 None,
                 None,
+                None,
             )
         elif sma_likelihood_ratio < SMA_CUTOFF:
             dout = smn_call(
@@ -255,6 +256,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
                 [None] * TOTAL_NUM_SITES,
                 None,
                 None,
+                None,
             )
         else:
             dout = smn_call(
@@ -266,6 +268,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
                 raw_smn1_cn,
                 tag,
                 [None] * TOTAL_NUM_SITES,
+                None,
                 None,
                 None,
             )
@@ -297,10 +300,8 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
 
         # targeted variant(s)
         #Adding from -add_pathogenic_variants
-        (var_alt, var_ref)
-        cn = call_cn_var_homo(full_length_cn, var_alt, var_ref)
-        new_call = get_called_variants(var_name, cn)
-        (new_call)
+        copy_number_variant = call_cn_var_homo(full_length_cn, var_alt, var_ref)
+        new_variants_being_called = get_called_variants(var_name, copy_number_variant)
         var_cn_confident = None
         raw_var_cn = None
         var_fraction = get_fraction(var_alt, var_ref)
@@ -339,7 +340,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name
             cn_prob,
             raw_var_cn,
             var_cn_confident,
-            new_call,
+            new_variants_being_called,
         )
 
     return dout

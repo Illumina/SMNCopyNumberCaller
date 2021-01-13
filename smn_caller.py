@@ -236,11 +236,11 @@ def main():
     variant_file = os.path.join(datadir, "SMN_target_variant_%s.txt" % genome)
     #Open variant files
 
-    with open(variant_file, 'r') as work:
-        for line in work:
+    with open(variant_file, 'r') as explore_variants:
+        for line in explore_variants:
             if not line.startswith("#"):
                 variants = line.split()
-                annotation = variants[5]
+                annotation = variants [6]
                 var_name.append(annotation)
     gmm_file = os.path.join(datadir, "SMN_gmm.txt")
     for required_file in [region_file, snp_file, variant_file, gmm_file]:
@@ -254,7 +254,7 @@ def main():
     variant_db = get_snp_position(variant_file)
     gmm_parameter = parse_gmm_file(gmm_file)
     region_dic = parse_region_file(region_file)
-    out_json = os.path.join(outdir, prefix + ".json")
+    out_json = os.path.join(outdir, prefix + ".json") 
     out_tsv = os.path.join(outdir, prefix + ".tsv")
     final_output = {}
     with open(manifest) as read_manifest:
@@ -267,7 +267,7 @@ def main():
             if count_file is None and os.path.exists(bam_name) == 0:
                 logging.warning(
                     "Input alignmet file for sample %s does not exist.", sample_id
-                )
+                ) 
             elif count_file is not None and os.path.exists(count_file) == 0:
                 logging.warning(
                     "Input count file for sample %s does not exist", sample_id
