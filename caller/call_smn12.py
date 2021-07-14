@@ -133,8 +133,8 @@ def get_smn1_call_and_tag(cn_prob_all, combined_call):
     )
 
     # sliding window of three sites covering the splice site
-    # [11, 12, 13], [12, 13, 14], [13, 14, 15]
-    if lsitecall_loose_counter[0][1] >= 5:
+    # [11, 12, 13], [12, 13, 14], [13, 14, 15] (1-based)
+    if lsitecall_loose_counter != [] and lsitecall_loose_counter[0][1] >= 5:
         for i in [11, 12, 13]:
             sliding_window = [i, i + 1, i + 2]
             prob_window = [cn_prob_all[a - 1] for a in sliding_window]
@@ -150,7 +150,7 @@ def get_smn1_call_and_tag(cn_prob_all, combined_call):
                 return tag, cn_smn1, lsitecall_loose
 
     # At least 5 sites need to agree
-    if lsitecall_medium_counter[0][1] >= 5:
+    if lsitecall_medium_counter != [] and lsitecall_medium_counter[0][1] >= 5:
         tag = "PASS:Majority"
         cn_smn1 = lsitecall_medium_counter[0][0]
         return tag, cn_smn1, lsitecall_loose
@@ -158,11 +158,12 @@ def get_smn1_call_and_tag(cn_prob_all, combined_call):
     # When the call summing up all sites is very confident
     if (
         len(combined_call) == 1
+        and lsitecall_loose_counter != []
         and combined_call[0] == lsitecall_loose_counter[0][0]
         and lsitecall_loose_counter[0][1] >= 5
     ):
         tag = "PASS:AgreeWithSum"
-        cn_smn1 = lsitecall_medium_counter[0][0]
+        cn_smn1 = lsitecall_loose_counter[0][0]
         return tag, cn_smn1, lsitecall_loose
 
     # The remaining ones will be no-call
