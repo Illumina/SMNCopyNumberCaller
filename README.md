@@ -4,7 +4,7 @@ SMNCopyNumberCaller is a tool to call the copy number of full-length SMN1, full-
 
 Chen X, Sanchis-Juan A, French CE, et al. Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genet Med. February 2020:1-9. doi:10.1038/s41436-020-0754-0
 
-SMNCopyNumberCaller is provided under the terms and conditions of the [Apache License Version 2.0](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/LICENSE.txt). It requires several third party packages (numpy, scipy, statsmodels and pysam) provided under other open source licenses, which are listed in [COPYRIGHT.txt](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/COPYRIGHT.txt).  
+SMNCopyNumberCaller is provided under the terms and conditions of the [PolyForm Strict License 1.0.0](LICENSE.txt). It requires several third party packages (numpy, scipy, statsmodels and pysam) provided under other open source licenses, which are listed in [COPYRIGHT.txt](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/COPYRIGHT.txt).  
 
 ## Running the program
 This Python3 program can be run as follows:
