@@ -7,7 +7,7 @@ Chen X, Sanchis-Juan A, French CE, et al. Spinal muscular atrophy diagnosis and 
 SMNCopyNumberCaller is provided under the terms and conditions of the [PolyForm Strict License 1.0.0](LICENSE.txt). It requires several third party packages (numpy, scipy, statsmodels and pysam) provided under other open source licenses, which are listed in [COPYRIGHT.txt](https://github.com/Illumina/SMNCopyNumberCaller/blob/master/COPYRIGHT.txt).  
 
 ## Running the program
-This Python3 program can be run as follows:
+This Python3 program can be cloned/downloaded from git and run as follows:
 ```bash
 smn_caller.py --manifest MANIFEST_FILE \
               --genome [19/37/38] \
@@ -17,6 +17,8 @@ smn_caller.py --manifest MANIFEST_FILE \
 ```
 Each line in the manifest file should list the absolute path to an input BAM/CRAM file.
 For CRAM input, it’s suggested to provide the path to the reference fasta file with --reference in the command. 
+
+This tool can also be installed from conda with `conda install -c bioconda smncopynumbercaller`, see [#7](/../../issues/7).
 
 ## Interpreting the output
 The program produces a .tsv file in the directory specified by --outDir.   
