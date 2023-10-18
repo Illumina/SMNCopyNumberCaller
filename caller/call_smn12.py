@@ -35,6 +35,10 @@ from depth_calling.copy_number_call import (
     process_raw_call_gc,
     process_raw_call_denovo,
 )
+from caller.call_variants import (
+    call_cn_var_homo,
+    get_called_variants,
+)
 
 SMA_CUTOFF = 1e-6
 TOTAL_NUM_SITES = 16
@@ -204,13 +208,13 @@ def get_carrier_status(site_calls, cn_prob, cn_smn1, sma_likelihood_ratio):
     return None
 
 
-def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
+def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth, var_name):
     """Return the copy nubmer call of SMN1, SMN2 and SMNstar."""
     smn1_fraction = get_fraction(lsnp1, lsnp2)
     smn_call = namedtuple(
         "smn_call",
         "SMN1 SMN2 SMN2delta78 isCarrier isSMA \
-        SMN1_CN_raw Info Confidence g27134TG_raw g27134TG_CN",
+        SMN1_CN_raw Info Confidence g27134TG_raw g27134TG_CN variants_called",
     )
     raw_cn_call = update_full_length_cn(raw_cn_call)
     full_length_cn = raw_cn_call.exon78_cn
@@ -239,6 +243,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
                 [None] * TOTAL_NUM_SITES,
                 None,
                 None,
+                None,
             )
         elif sma_likelihood_ratio < SMA_CUTOFF:
             dout = smn_call(
@@ -252,6 +257,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
                 [None] * TOTAL_NUM_SITES,
                 None,
                 None,
+                None,
             )
         else:
             dout = smn_call(
@@ -263,6 +269,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
                 raw_smn1_cn,
                 tag,
                 [None] * TOTAL_NUM_SITES,
+                None,
                 None,
                 None,
             )
@@ -293,6 +300,9 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
         )
 
         # targeted variant(s)
+        #Adding from -add_pathogenic_variants
+        copy_number_variant = call_cn_var_homo(full_length_cn, var_alt, var_ref)
+        new_variants_being_called = get_called_variants(var_name, copy_number_variant)
         var_cn_confident = None
         raw_var_cn = None
         var_fraction = get_fraction(var_alt, var_ref)
@@ -331,6 +341,7 @@ def get_smn12_call(raw_cn_call, lsnp1, lsnp2, var_ref, var_alt, mdepth):
             cn_prob,
             raw_var_cn,
             var_cn_confident,
+            new_variants_being_called,
         )
 
     return dout
